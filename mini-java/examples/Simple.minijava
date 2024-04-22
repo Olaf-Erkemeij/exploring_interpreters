@@ -1,0 +1,28 @@
+
+class Simple {
+  public static void main(String[] args) {
+    System.out.println(new Sup().Start(10));
+  }
+}
+
+class Sup {
+    int m_val;
+  public int Start(int val) {
+      m_val = val;
+      return this.Print();
+  }
+
+  public int Print() {
+      boolean cont;
+      cont = true;
+      while (cont) {
+          if (m_val < 1) {
+              cont = false;
+          } else {
+            System.out.println(m_val);
+            m_val = m_val - 1;
+          }
+      }
+      return 1;
+  }
+}

@@ -1,0 +1,17 @@
+class SimpleOverride {
+  public static void main(String[] args) {
+    System.out.println(new Sub().Method());
+  }
+}
+
+class Sup {
+  public int Method() {
+    return 1;
+  }
+}
+
+class Sub {
+  public int Method() {
+    return 42;
+  }
+}

@@ -1,0 +1,13 @@
+class BasicInheritance {
+  public static void main(String[] args) {
+    System.out.println(new Sub().Sub());
+  }
+}
+
+class Super {
+  public int Sup() { return 6; }
+}
+
+class Sub extends Super{
+  public int Sub() { return this.Sup() * 7; }
+}
