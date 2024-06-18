@@ -1,8 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-
+{-# LANGUAGE AllowAmbiguousTypes #-}
 
 
 module Language.Explorer.Tools.Protocol where
@@ -82,7 +81,7 @@ instance ToJSON ErrorMessage where
 instance FromJSON ErrorMessage
     -- No need to provide a parseJSON implementation.
 
--- instance Except ErrorMessage 
+-- instance Except ErrorMessage
 -- where
 --     noMsg = ErrorMessage { code = 0, message = "", error_data = Nothing}
 --     strMsg msg = ErrorMessage {code = 0, message = msg, error_data = Nothing }
@@ -99,11 +98,11 @@ data JumpResult = JumpResult {
     jump_post :: Value
 }
 
-instance ToJSON JumpResult where 
+instance ToJSON JumpResult where
     toJSON res = object ["post" .= jump_post res]
 
 data ExecuteParams = ExecuteParams {
-    program :: String
+    paramsProgram :: String
 } deriving (Show, Generic)
 
 instance FromJSON ExecuteParams
@@ -132,7 +131,7 @@ data RevertResult = RevertResult {
     post_revert :: Value
 }
 
-instance ToJSON RevertResult where 
+instance ToJSON RevertResult where
     toJSON res = object ["deleted" .= revert_deleted res, "post" .= post_revert res]
 
 data DerefParams = DerefParams {
@@ -180,8 +179,8 @@ instance ToJSON ExecutionTree where
     toEncoding = genericToEncoding defaultOptions
 
 data PathParams = PathParams {
-    source :: Int,
-    target :: Int
+    paramsSource :: Int,
+    paramsTarget :: Int
 } deriving (Generic)
 
 instance FromJSON PathParams
@@ -245,7 +244,7 @@ execute v = case (fromJSON v) :: Result ExecuteParams of
     (Error e) -> throwE invalidParams
     (Success v') -> do
         parser <- lift $ ask
-        let pl = parser $ program (v' :: ExecuteParams)
+        let pl = parser $ paramsProgram v'
         case pl of
             Just prog -> do
                 ex <- lift $ get
@@ -269,7 +268,7 @@ revert v = case (fromJSON v) :: Result RevertParams of
             Just ex' -> do
                 lift $ put ex'
                 return $ toJSON $ RevertResult { revert_deleted = deleted, post_revert = postRevert ex ex' deleted}
-                where 
+                where
                     refs = map fst (allRefs ex)
                     refs' = map fst (allRefs ex')
                     deleted = (refs \\ refs')
@@ -288,7 +287,7 @@ executionTree :: (ToJSON o, ToJSON p) => ExceptT ErrorMessage (EIP p IO c o) Val
 executionTree = do
     ex <- lift $ get
     let (curr, nodes, edges) = Ex.executionGraph ex
-    return $ toJSON $ ExecutionTree 
+    return $ toJSON $ ExecutionTree
         { current = fst curr
         , references = map fst nodes
         , edges = map (\(s, (p, o), t) -> Edge { source = fst s
@@ -322,7 +321,7 @@ getPath val = case (fromJSON val) :: Result PathParams of
     (Error e) -> throwE ErrorMessage { code = pathNonExistingCode, message = "", error_data = Nothing}
     (Success v) -> do
         ex <- lift $ get
-        let path = Ex.getPathFromTo ex (source (v :: PathParams)) (target (v :: PathParams))
+        let path = Ex.getPathFromTo ex (paramsSource v) (paramsTarget v)
         return $ toJSON $ map (\(s, (p, o), t) -> Edge { source = fst s, target = fst t, label = EdgeLabel { program = toJSON p, mval = toJSON o} }) path
 
 getLeaves :: ExceptT ErrorMessage (EIP p IO c o) Value

@@ -2,15 +2,15 @@ module Abs where
 
 
 data Expr = Integer Int
-          | Boolean Bool 
-          | Identifier String 
+          | Boolean Bool
+          | Identifier String
           | Add Expr Expr
           | Mul Expr Expr
-          | Sub Expr Expr 
+          | Sub Expr Expr
           | Band Expr Expr
           | LTh Expr Expr
           | This
-          | Length Expr 
+          | Length Expr
           | Not Expr
           | NewArray Expr
           | NewObj String
@@ -26,13 +26,13 @@ data Statement = Block [Statement]
                | ArrAssign String Expr Expr
                deriving (Show, Eq)
 
-data Phrase = PExpr Expr 
+data Phrase = PExpr Expr
             | PStmt Statement
-            | PVar VarDecl 
+            | PVar VarDecl
             | PClass ClassDecl
             | PMethod MethodDecl
             | PMethodCall String [Expr]
-            | PSeq Phrase Phrase 
+            | PSeq Phrase Phrase
             deriving (Show, Eq)
 
 data Type = TInt | TBoolean | TIntArray | TIdentifier String deriving (Show, Eq)

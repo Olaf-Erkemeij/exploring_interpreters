@@ -15,11 +15,11 @@ import Control.Monad.Catch
 
 
 type MetaTable p m c o = [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
-type RParser p c = String -> c -> Maybe p
+type RParser e p c = String -> c -> Either e p
 type Prompt p m c o = Explorer p m c o -> String
 type MetaHandler p m c o = String -> Explorer p m c o -> m (Explorer p m c o)
 type OutputHandler m o = o -> m ()
-type Repl p m c o = Prompt p m c o -> RParser p c -> String -> MetaTable p m c o -> MetaHandler p m c o -> OutputHandler m o -> Explorer p m c o -> m ()
+type Repl e p m c o = Prompt p m c o -> RParser e p c -> String -> MetaTable p m c o -> MetaHandler p m c o -> OutputHandler m o -> Explorer p m c o -> m ()
 
 
 handleJump :: MonadIO m => String -> Explorer p m c o -> m (Explorer p m c o)
@@ -52,7 +52,7 @@ metaTable = [
 constructMetaTable :: MonadIO m => String -> [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
 constructMetaTable prefix = map (first (prefix ++ )) metaTable
 
-repl :: (Eq p, Eq o, Monoid o, MonadIO m, MonadMask m) => Repl p m c o
+repl :: (Show e, Eq p, Eq o, Monoid o, MonadIO m, MonadMask m) => Repl e p m c o
 repl prompt parser metaPrefix metaTable metaHandler outputHandler ex =
   Hl.runInputT Hl.defaultSettings (loop ex)
     where
@@ -69,5 +69,5 @@ repl prompt parser metaPrefix metaTable metaHandler outputHandler ex =
               Nothing -> metaHandler input ex
         runExec input =
           case parser input (config ex) of
-            (Just program) -> execute program ex >>= \(newEx, out) -> outputHandler out >> return newEx
-            Nothing -> return ex
+            (Right program) -> execute program ex >>= \(newEx, out) -> outputHandler out >> return newEx
+            (Left err) -> liftIO (print err) >> return ex

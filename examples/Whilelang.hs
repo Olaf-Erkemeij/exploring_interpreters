@@ -135,7 +135,7 @@ definterpM c cfg = do
 
 
 parser :: String -> c -> Maybe Command
-parser s _ = Just (read s :: Command)
+parser s _ = Right (read s :: Command)
 
 repl = R.repl (const "While> ") parser ":" R.metaTable  (\_ ex -> return ex) (\_ -> return ()) (EM.mkExplorerNoSharing definterpM initialConfig)
 

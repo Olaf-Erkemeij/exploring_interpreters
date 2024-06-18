@@ -23,12 +23,16 @@ executable mini-java
                        SeqInterpreter
                        JSON
   -- other-extensions:
-  build-depends: base 
+  build-depends: base
                , gll
                , containers
                , mtl
-               , exploring-interpreters >= 1.1.0.0 && < 1.2
+               , exploring-interpreters >= 1.1.0.0
                , aeson
                , text
+               , QuickCheck >= 2.7
+               , deepseq
+               , ghc-datasize
+
   -- hs-source-dirs:
   default-language:    Haskell2010
