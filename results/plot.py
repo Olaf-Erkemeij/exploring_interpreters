@@ -129,15 +129,13 @@ def plot_detail_test():
     data = pd.read_csv("data/data3.csv")
     plt.figure(figsize=(10, 6))
 
-    # Use consistent color scheme and line styles
-    colors = {'0.0': '#1f77b4', '0.5': '#ff7f0e'}  # Blue and orange
-    components = {'Cmap': '-', 'ExecEnv': '--'}  # Solid vs dashed
+    colors = {'0.0': '#1f77b4', '0.5': '#ff7f0e'} 
+    components = {'Cmap': '-', 'ExecEnv': '--'}
 
     for p in [0.0, 0.5]:
         p_key = f"{p:.1f}"
         p_data = data[data["P"] == p]
 
-        # Single aggregation for both components
         agg_data = p_data.groupby('N').agg(
             cmap_mean=('Cmap', 'mean'),
             cmap_std=('Cmap', 'std'),
@@ -145,7 +143,6 @@ def plot_detail_test():
             execenv_std=('ExecEnv', 'std')
         ).reset_index()
 
-        # Plot both components with error bands
         for component in ['Cmap', 'ExecEnv']:
             mean = agg_data[f"{component.lower()}_mean"]
             std = agg_data[f"{component.lower()}_std"]
@@ -157,52 +154,40 @@ def plot_detail_test():
                     label=f'{component} (P={p})',
                     linewidth=2)
 
-            # Add error bands with subtle transparency
             plt.fill_between(N,
                             mean - std,
                             mean + std,
                             color=colors[p_key],
                             alpha=0.15)
 
-    # Improved legend handling
     handles, labels = plt.gca().get_legend_handles_labels()
     unique_labels = dict(zip(labels, handles))  # Remove duplicates
     plt.legend(unique_labels.values(), unique_labels.keys(),
               title="Component & Probability",
               loc='upper left')
 
-    # Formatting improvements
     plt.xlabel("Number of Nodes (N)", fontsize=12, labelpad=10)
     plt.ylabel("State Storage Size", fontsize=12, labelpad=10)
     plt.gca().yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(formatBytes))
     plt.title("Memory Usage Analysis: Component Breakdown by Tree Size and Probability",
              fontsize=14, pad=20)
 
-    # Add grid and adjust ticks
     plt.grid(True, which='both', linestyle='--', alpha=0.3)
     plt.minorticks_on()
 
-    # Set axis limits and padding
     plt.xlim(left=0)
     plt.ylim(bottom=0)
     plt.tight_layout(pad=2)
-
-    # Add data source annotation
-    plt.text(0.98, 0.02, 'Data: 5 measurements per N value',
-            transform=plt.gca().transAxes,
-            ha='right', va='bottom', fontsize=9, alpha=0.7)
 
     plt.savefig("plot_detail_test.png", dpi=300, bbox_inches='tight')
     plt.close()
 
 
 def plot_larger_test():
-    # Load and prepare data
     plt.figure(figsize=(10, 6))
     data = pd.read_csv("data/data4.csv")
     data['size'] = data['Cmap'] + data['ExecEnv']
 
-    # Aggregate data by N and P
     agg_data = data.groupby(['N', 'P']).agg(
         mean_size=('size', 'mean'),
         std_size=('size', 'std')
@@ -218,7 +203,6 @@ def plot_larger_test():
         mean_size = data_p['mean_size'].values
         std_size = data_p['std_size'].values
 
-        # Fit quadratic polynomial to mean size
         coeffs = np.polyfit(N, mean_size, 2)
         poly = np.poly1d(coeffs)
         x_smooth = np.linspace(N.min(), N.max(), 300)
