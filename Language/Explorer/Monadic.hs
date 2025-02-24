@@ -16,6 +16,7 @@ module Language.Explorer.Monadic
     , execEnv
     , currRef
     , leaves
+    , cmap
     , Ref
     , Language
     , deref
@@ -76,7 +77,7 @@ initialRef :: Int
 initialRef = 1
 
 mkExplorerNoSharing :: Language p m c o  => (p -> c -> m (Maybe c, o)) -> c -> Explorer p m c o
-mkExplorerNoSharing = mkExplorer False (\_ -> \_ -> False)
+mkExplorerNoSharing = mkExplorer False (\_ _ -> False)
 
 deref :: Explorer p m c o -> Ref -> Maybe c
 deref e r = IntMap.lookup r (cmap e)
@@ -117,7 +118,7 @@ updateShadowEnv e (p, newconf, output, newref, oldref) =
 
 updateExecEnvs :: Language p m c o => Explorer p m c o -> (p, c, o) -> Explorer p m c o
 updateExecEnvs e (p, newconf, output)
-  | shadowing e = addNewPath (updateShadowEnv e (p, newconf, output, (currRef newexplorer), (currRef e))) p output newconf
+  | shadowing e = addNewPath (updateShadowEnv e (p, newconf, output, currRef newexplorer, currRef e)) p output newconf
   | otherwise = newexplorer
   where
     newexplorer = addNewPath e p output newconf
@@ -145,14 +146,14 @@ deleteFromShadowEnv [(l, r)] gr = case match r gr of
 deleteFromShadowEnv (x:xs) gr = deleteFromShadowEnv xs (deleteFromShadowEnv [x] gr)
 
 cleanEdges :: [Ref] -> [(Ref, Ref, (p, o))] -> [(Ref, Ref, (p, o))]
-cleanEdges ref edg = filter (\(s, t, l) -> not $ t `elem` ref) edg
+cleanEdges ref = filter (\(s, t, l) -> t `notElem` ref)
 
 cleanShadowEnv :: Bool -> [Ref] -> Gr [Ref] (p, o) -> Gr [Ref] (p, o)
 cleanShadowEnv False _ g = g
 cleanShadowEnv True nds g = shadowEnv''
   where
     shadowEnv' = deleteFromShadowEnv (map (\r -> (r, findNodeRef g r)) nds) g
-    nodesToDel' = map fst (filter (\(r, labels) -> labels == []) $ labNodes (shadowEnv'))
+    nodesToDel' = map fst (filter (\(r, labels) -> null labels) $ labNodes shadowEnv')
     edgesToDel' = filter (\(s, t) -> s `elem` nodesToDel' || t `elem` nodesToDel') (edges shadowEnv')
     shadowEnv'' = (delEdges edgesToDel' . delNodes nodesToDel') shadowEnv'
 
@@ -163,7 +164,7 @@ findRevertableNodes gr source target =
     (Just node) -> fst $ findRevertableNodes' gr node target
     Nothing     -> []
   where
-    findNextNodeInPath gr source target = find (\n -> target `elem` (reachable n gr)) (suc gr source)
+    findNextNodeInPath gr source target = find (\n -> target `elem` reachable n gr) (suc gr source)
     findRevertableNodes' gr source target
       | source == target = if outdeg gr source > 1 then ([], StopRevert) else ([source], ContinueRevert)
       | otherwise = case findNextNodeInPath gr source target of
@@ -197,7 +198,7 @@ toTree exp = mkTree initialRef
 
 
 incomingEdges :: Ref -> Explorer p m c o -> [((Ref, c), (p, o), (Ref, c))]
-incomingEdges ref e = foldr (\(s, t, l) acc ->  [((s, unpack s), l, (t, unpack t))] ++ acc) [] (filter (\(_, t, _) -> t == ref) (labEdges (execEnv e)))
+incomingEdges ref e = foldr (\(s, t, l) acc ->  ((s, unpack s), l, (t, unpack t)) : acc) [] (filter (\(_, t, _) -> t == ref) (labEdges (execEnv e)))
   where
     unpack ref = fromJust $ deref e ref
 
@@ -210,17 +211,15 @@ getTraces e = getPathsFromTo e initialRef (currRef e)
 
 mapOut :: Explorer p m c o -> Gr Ref (p, o) -> [Ref] -> Ref -> (Ref, Ref, (p,o)) -> Maybe [[((Ref, c), (p, o), (Ref, c))]]
 mapOut exp gr visited goal (s, t, (l, o))
-  | goal == t = Just $ [[((s, unpack s), (l, o), (t, unpack t))]] ++ explore
-  | otherwise = case t `elem` visited of
-                  True -> Nothing
-                  False -> Just explore
+  | goal == t = Just $ [((s, unpack s), (l, o), (t, unpack t))] : explore
+  | otherwise = if t `elem` visited then Nothing else Just explore
   where
-    explore = map ((:)((s, unpack s), (l, o), (t, unpack t))) (concat $ catMaybes $ map (mapOut exp gr (t : visited) goal) (out gr t))
+    explore = map (((s, unpack s), (l, o), (t, unpack t)) :) (concat $ mapMaybe (mapOut exp gr (t : visited) goal) (out gr t))
     unpack ref = fromJust $ deref exp ref
 
 
 getPathsFromTo :: Explorer p m c o -> Ref -> Ref -> [[((Ref, c), (p, o), (Ref, c))]]
-getPathsFromTo exp from to = concat $ catMaybes $ map (mapOut exp (execEnv exp) [from] to) (out (execEnv exp) from)
+getPathsFromTo exp from to = concat $ mapMaybe (mapOut exp (execEnv exp) [from] to) (out (execEnv exp) from)
 
 getPathFromTo :: Explorer p m c o -> Ref -> Ref -> [((Ref, c), (p, o), (Ref, c))]
 getPathFromTo exp from to =
@@ -247,7 +246,7 @@ leaves exp = map refToPair leaf_nodes
   where
     env = execEnv exp
     refToPair = \r -> (r, fromJust $ deref exp r)
-    leaf_nodes = nodes $ nfilter (\n -> (==0) $ outdeg env n) env
+    leaf_nodes = nodes $ nfilter ((==0) . outdeg env) env
 
 
 toExport :: Explorer p m c o -> (Ref, [(Ref, c)], [(Ref, Ref, (p, o))])
