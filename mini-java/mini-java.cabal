@@ -33,6 +33,7 @@ executable mini-java
                , QuickCheck >= 2.7
                , deepseq
                , ghc-datasize
+               , hashable
 
   -- hs-source-dirs:
   default-language:    Haskell2010

@@ -22,6 +22,8 @@ source-repository head
 library
   exposed-modules:
       Language.Explorer.Monadic,
+      Language.Explorer.Monadic2,
+      Language.Explorer.Algebraic,
       Language.Explorer.Pure,
       Language.Explorer.Tools.REPL,
       Language.Explorer.Tools.Protocol
@@ -42,7 +44,10 @@ library
       http-types            >= 0.12.3 && < 0.13,
       network               >= 3.1.2 && < 3.2,
       haskeline             >=0.8.2 && < 0.9,
-      exceptions            >=0.10.4 && < 0.11
+      exceptions            >=0.10.4 && < 0.11,
+      algebraic-graphs,
+      hashable,
+      unordered-containers
 
   -- hs-source-dirs:
   default-language:    Haskell2010

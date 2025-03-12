@@ -257,7 +257,7 @@ runExperiment1 handle 0 _ = return ()
 runExperiment1 handle n p = do
   runExperiment1 handle (n - 1) p
   explorer <- randomTree n p
-  forM_ [1..5] $ \x -> calcSize handle explorer n p x
+  forM_ [1..2] $ \x -> calcSize handle explorer n p x
 
 runExperiment2 :: Handle -> Int -> Float -> IO ()
 runExperiment2 handle 0 _ = return ()
@@ -275,28 +275,29 @@ runExperiment2 handle n p = do
 runExperiments :: IO ()
 runExperiments = do
   -- Test multiple probabilities on lots of sizes
-  handle <- openFile "../results/data/data1.csv" WriteMode
-  hPutStrLn handle "N,P,X,Cmap,ExecEnv"
-  forM_ [0..10] $ \p -> runExperiment1 handle 250 (fromIntegral p / 10)
-  hClose handle
+  -- handle <- openFile "../results/data/data1.csv" WriteMode
+  -- hPutStrLn handle "N,P,X,Cmap,ExecEnv"
+  -- forM_ [0..10] $ \p -> runExperiment1 handle 250 (fromIntegral p / 10)
+  -- hClose handle
 
   -- Test multiple probability on a few sizes
-  handle2 <- openFile "../results/data/data2.csv" WriteMode
+  handle2 <- openFile "../results/data/data_monadic3.csv" WriteMode
   hPutStrLn handle2 "N,P,Size"
-  forM_ [0..10] $ \p -> runExperiment2 handle2 400 (fromIntegral p / 10)
+  forM_ [0..10] $ \p -> runExperiment2 handle2 200 (fromIntegral p / 10)
   hClose handle2
 
   -- runExperiment3 "../results/data/data3.csv"
 
 -- Given N and P, generate a tree and measure its size
-measureExplorer :: Int -> Float -> IO()
-measureExplorer n p = do
-  explorer <- randomTree n p
-  size1 <- recursiveSizeNF (EM.cmap explorer)
-  size2 <- recursiveSizeNF (EM.execEnv explorer)
-  print $ "CMap size: " ++ show size1
-  print $ "ExecEnv size: " ++ show size2
-  print $ "Total size: " ++ show (size1 + size2)
+-- measureExplorer :: Int -> Float -> IO()
+-- measureExplorer n p = do
+--   explorer <- randomTree n p
+--   size1 <- recursiveSizeNF (EM.cmap explorer)
+--   size2 <- recursiveSizeNF (EM.parents explorer)
+--   size3 <- recursiveSizeNF (EM.children explorer)
+--   print $ "CMap size: " ++ show size1
+--   print $ "ExecEnv size: " ++ show (size2 + size3)
+--   print $ "Total size: " ++ show (size1 + size2 + size3)
 
 main :: IO ()
 main = do
@@ -338,8 +339,8 @@ measureFromFile file = do
     (x : _) -> do
       (newExplr, _) <- EM.execute x explr
       size1 <- recursiveSizeNF (EM.cmap newExplr)
-      size2 <- recursiveSizeNF (EM.execEnv newExplr)
-      print $ (size1, size2)
+      -- size2 <- recursiveSizeNF (EM.execEnv newExplr)
+      print $ (size1) --, size2)
 
 factorial :: String
 factorial =

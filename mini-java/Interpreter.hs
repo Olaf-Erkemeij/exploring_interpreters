@@ -10,6 +10,7 @@ import Control.Monad.State.Lazy
 import Data.Functor
 import qualified Data.Map as M
 import Data.Maybe
+import Data.Hashable
 import GHC.IO.Handle.Text (commitBuffer')
 import GHC.RTS.Flags (CCFlags (msecsPerTick))
 
