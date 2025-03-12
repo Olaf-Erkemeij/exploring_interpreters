@@ -240,11 +240,62 @@ def plot_larger_test():
     plt.savefig("plot_larger_test.png", dpi=300, bbox_inches='tight')
     plt.close()
 
+def plot_monadic_test():
+    for test in ["monadic1", "monadic3"]:
+        data = pd.read_csv(f"data/data_{test}.csv")
+        data['size'] = data['Cmap'] + data['ExecEnv']
+
+        agg_data = data.groupby(['N', 'P']).agg(
+            mean_size=('size', 'mean'),
+            std_size=('size', 'std')
+        ).reset_index()
+
+        for i, p in enumerate(np.linspace(0, 1, 11)):
+            p = round(p, 1)
+            if p > 0.1: continue
+
+            data_p = agg_data[agg_data['P'] == p].sort_values('N')
+
+            N = data_p['N'].values
+            mean_size = data_p['mean_size'].values
+            std_size = data_p['std_size'].values
+
+            coeffs = np.polyfit(N, mean_size, 2)
+            poly = np.poly1d(coeffs)
+            x_smooth = np.linspace(N.min(), N.max(), 300)
+            y_smooth = poly(x_smooth)
+
+            # Calculate SEM
+            sem = std_size / np.sqrt(5)
+            interp_sem = interp1d(N, sem, kind='linear', fill_value='extrapolate')
+            sem_smooth = interp_sem(x_smooth)
+
+            label = f'P = {p:.1f} (Test {test[-1]})'
+
+            plt.plot(x_smooth, y_smooth, label=label)
+            plt.fill_between(x_smooth, y_smooth - sem_smooth, y_smooth + sem_smooth, alpha=0.2)
+        
+    plt.xlabel("Number of Nodes (N)", fontsize=12)
+    plt.ylabel("State Storage Size", fontsize=12)
+    plt.gca().yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(formatBytes))
+
+    # Add grid and adjust ticks
+    plt.grid(True, which='both', linestyle='--', alpha=0.3)
+    plt.minorticks_on()
+
+    plt.title("Memory usage vs. Nodes for different probabilities")
+    plt.legend(title="Probability (P)", loc='upper left')
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+
+    plt.savefig(f"plot_monadic.png", dpi=300, bbox_inches='tight')
+    plt.close()
 
 if __name__ == "__main__":
+    plot_monadic_test()
     # plotLargerTest()
     # plotSmallTest()
-    plotProbTest()
+    # plotProbTest()
     # plotDetailTest()
-    plot_detail_test()
-    plot_larger_test()
+    # plot_detail_test()
+    # plot_larger_test()
