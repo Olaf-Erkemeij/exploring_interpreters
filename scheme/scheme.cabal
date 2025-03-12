@@ -1,0 +1,36 @@
+cabal-version:      3.0
+
+name:               scheme
+version:            0.1.0.0
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Olaf Erkemeij
+maintainer:         o.a.erkemeij@gmail.com
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+
+common warnings
+    ghc-options: -Wall
+
+executable scheme
+    import:           warnings
+    main-is:          Main.hs
+    other-modules:    Abs
+                      Interpreter
+    --                   SeqInterpreter
+    --                   JSON
+
+    -- other-extensions:
+    build-depends: base
+                , gll
+                , containers
+                , mtl
+                , exploring-interpreters >= 1.1.0.0
+                , aeson
+                , text
+                , QuickCheck >= 2.7
+                , deepseq
+                , ghc-datasize
+                , regex-applicative
+
+    default-language: Haskell2010
