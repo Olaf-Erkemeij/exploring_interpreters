@@ -30,13 +30,13 @@ module Language.Explorer.Monadic5
 where
 
 import Control.DeepSeq (NFData, rnf)
+import Data.Bifunctor (Bifunctor (second))
 import Data.Foldable (foldlM)
 import qualified Data.IntMap.Strict as IntMap
 import Data.List (foldl')
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromJust, fromMaybe, mapMaybe, maybeToList)
 import qualified Data.Set as Set
 import Data.Tree (Tree (..))
-import Data.Bifunctor (Bifunctor(second))
 
 type Ref = Int
 
@@ -44,7 +44,7 @@ type Language p m c o = (Eq p, Eq o, Monad m, Monoid o)
 
 data ExpNode p c o = ExpNode
   { nodeConfig :: !c,
-    nodeParent :: !(Maybe Ref),
+    nodeParent :: !Ref,
     nodeEdge :: !(Maybe (p, o))
   }
 
@@ -67,7 +67,7 @@ mkExplorer shadow shadowEq definterp conf =
     { defInterp = definterp,
       genRef = 1, -- Currently generate references by increasing a counter.
       currRef = initialRef,
-      history = IntMap.singleton initialRef (ExpNode conf Nothing Nothing)
+      history = IntMap.singleton initialRef (ExpNode conf 0 Nothing)
     }
 
 initialRef :: Int
@@ -87,7 +87,7 @@ addNewPath e p o c =
   e
     { currRef = newref,
       genRef = newref,
-      history = IntMap.insert newref (ExpNode c (Just $ currRef e) (Just (p, o))) (history e)
+      history = IntMap.insert newref (ExpNode c (currRef e) (Just (p, o))) (history e)
     }
   where
     newref = genRef e + 1
@@ -115,50 +115,50 @@ revert targetRef e
   | targetRef == currRef e = Just e
   | otherwise =
       case findAncestryPath (currRef e) targetRef [] of
-        Just (nodesToDelete, True) ->
-              Just $ e { history = foldl' (flip IntMap.delete) (history e) nodesToDelete
-                       , currRef = targetRef
-                       }
+        Just nodesToDelete ->
+          Just $
+            e
+              { history = foldl' (flip IntMap.delete) (history e) nodesToDelete,
+                currRef = targetRef
+              }
         _ -> Nothing
   where
-    findAncestryPath :: Ref -> Ref -> [Ref] -> Maybe ([Ref], Bool)
+    findAncestryPath :: Ref -> Ref -> [Ref] -> Maybe [Ref]
     findAncestryPath start end acc
-      | start == end = Just (acc, True) -- Found target, path exists
-      | otherwise = case IntMap.lookup start (history e) >>= nodeParent of
-          Nothing -> Just (acc, False) -- Reached root without finding end
+      | start == end = Just acc
+      | otherwise = case nodeParent <$> IntMap.lookup start (history e) of
+          Nothing -> Nothing
+          Just 0 -> Nothing
           Just parentRef -> findAncestryPath parentRef end (start : acc)
 
 jump :: Ref -> Explorer p m c o -> Maybe (Explorer p m c o)
-jump r e
-    | IntMap.member r (history e) = Just $ e { currRef = r }
-    | otherwise = Nothing
+jump r e = IntMap.lookup r (history e) >> Just e {currRef = r}
 
 findChildren :: Explorer p m c o -> Ref -> [Ref]
 findChildren e ref = IntMap.foldrWithKey findChild [] (history e)
   where
-    findChild k node acc = maybe acc (\parentRef -> if parentRef == ref then k : acc else acc) (nodeParent node)
+    findChild k node acc = if nodeParent node == ref then k : acc else acc
 
 toTree :: Explorer p m c o -> Tree (Ref, c)
 toTree e = buildNode initialRef
   where
-    buildNode ref =
-      let nodeData = fromMaybe (error $ "toTree: Ref " ++ show ref ++ " not found.") (IntMap.lookup ref (history e))
-          childrenRefs = findChildren e ref
-          childTrees = map buildNode childrenRefs
-       in Node (ref, nodeConfig nodeData) childTrees
+    buildNode ref = Node (ref, nodeConfig $ fromJust (IntMap.lookup ref (history e))) (map buildNode (findChildren e ref))
 
-incomingEdges :: Ref -> Explorer p m c o -> [((Ref, c), (p, o), (Ref, c))]
-incomingEdges ref e =
+getEdgeInfo :: Explorer p m c o -> Ref -> Maybe ((Ref, c), (p, o), (Ref, c))
+getEdgeInfo e ref =
   case IntMap.lookup ref (history e) of
     Just nodeData ->
       case (nodeParent nodeData, nodeEdge nodeData) of
-        (Just parentRef, Just transition) ->
+        (parentRef, Just transition) | parentRef > 0 ->
           case IntMap.lookup parentRef (history e) of
-            Nothing -> []
+            Nothing -> Nothing
             Just parentNodeData ->
-              [((parentRef, nodeConfig parentNodeData), transition, (ref, nodeConfig nodeData))]
-        _ -> []
-    Nothing -> []
+              Just ((parentRef, nodeConfig parentNodeData), transition, (ref, nodeConfig nodeData))
+        _ -> Nothing
+    Nothing -> Nothing
+
+incomingEdges :: Explorer p m c o -> Ref -> [((Ref, c), (p, o), (Ref, c))]
+incomingEdges e = maybeToList . getEdgeInfo e
 
 getTrace :: Explorer p m c o -> [((Ref, c), (p, o), (Ref, c))]
 getTrace e = getPathFromTo e initialRef (currRef e)
@@ -174,18 +174,9 @@ getPathFromTo exp from to = reverse $ go from []
   where
     go ref acc
       | ref == to = acc
-      | otherwise =
-          case IntMap.lookup ref (history exp) of
-            Just nodeData ->
-              case (nodeParent nodeData, nodeEdge nodeData) of
-                (Just parentRef, Just transition) ->
-                  case IntMap.lookup parentRef (history exp) of
-                    Just parentNodeData ->
-                      let newAcc = ((parentRef, nodeConfig parentNodeData), transition, (ref, nodeConfig nodeData)) : acc
-                       in go parentRef newAcc
-                    Nothing -> []
-                _ -> []
-            Nothing -> []
+      | otherwise = case getEdgeInfo exp ref of
+          Just edgeInfo@((x, _), _, _) -> go x $ edgeInfo : acc
+          Nothing -> []
 
 nodes :: Explorer p m c o -> [(Ref, c)]
 nodes = map (second nodeConfig) . IntMap.assocs . history
@@ -194,23 +185,13 @@ executionGraph :: Explorer p m c o -> ((Ref, c), [(Ref, c)], [((Ref, c), (p, o),
 executionGraph e =
   ( (currRef e, config e),
     nodes e,
-    IntMap.foldrWithKey buildEdge [] hist
+    mapMaybe (getEdgeInfo e) (IntMap.keys (history e))
   )
-  where
-    hist = history e
-    buildEdge targetRef targetData acc =
-      case (nodeParent targetData, nodeEdge targetData) of
-        (Just parentRef, Just transition) ->
-          case IntMap.lookup parentRef hist of
-            Just parentData ->
-              ((parentRef, nodeConfig parentData), transition, (targetRef, nodeConfig targetData)) : acc
-            Nothing -> acc
-        _ -> acc
 
 leaves :: Explorer p m c o -> [(Ref, c)]
 leaves e = filter (\(ref, _) -> not (Set.member ref parents)) (nodes e)
-    where
-        parents = Set.fromList $ mapMaybe nodeParent (IntMap.elems (history e))
+  where
+    parents = Set.fromList $ map nodeParent (IntMap.elems (history e))
 
 toExport :: Explorer p m c o -> (Ref, IntMap.IntMap (ExpNode p c o), Ref)
 toExport e = (currRef e, history e, genRef e)
