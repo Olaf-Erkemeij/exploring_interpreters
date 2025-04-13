@@ -62,10 +62,7 @@ writeNodeData (DiskStoreHandles conn _) ref parent checkpoint config edge =
     \VALUES (?, ?, ?, ?, ?)"
     (ref, parent, checkpoint, SQLBlob config, maybe SQLNull SQLBlob edge)
 
-fetchNodeData ::
-  DiskStoreHandles ->
-  Ref ->
-  IO (Maybe (Ref, Bool, B.ByteString, Maybe B.ByteString))
+fetchNodeData :: DiskStoreHandles -> Ref -> IO (Maybe (Ref, Bool, B.ByteString, Maybe B.ByteString))
 fetchNodeData (DiskStoreHandles conn _) ref =
   listToMaybe
     <$> query

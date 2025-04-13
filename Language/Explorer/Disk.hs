@@ -61,30 +61,33 @@ initialRef = 1
 
 mkExplorerIO ::
   (Language p c o, Storable p c o) =>
-  FilePath -> -- Path to the SQLite database
-  (p -> c -> IO (Maybe c, o)) -> -- Interpreter
-  c -> -- Initial configuration
+  FilePath ->
+  (p -> c -> IO (Maybe c, o)) -> 
+  c -> 
   IO (Explorer p c o)
 mkExplorerIO path definterp conf = do
   diskStore <- DiskStore.initStore path True
-  cache <- LRU.newAtomicLRU (Just 10) -- TODO: 10 entries or more?
+  -- TODO: 10 entries or more for the cache? User configurable?
+  cache <- LRU.newAtomicLRU (Just 10)
   let edgeBlob = Nothing
   let configBlob = Diff.encodeJSON conf
   let configBlobCompressed = Diff.compress configBlob
 
   DiskStore.writeNodeData diskStore initialRef 0 True configBlobCompressed edgeBlob
 
-  ref <- newIORef (ExplorerState diskStore cache initialRef initialRef definterp 5) -- TODO: Make adjustable
+  -- TODO: Adjustable checkpoint system
+  ref <- newIORef (ExplorerState diskStore cache initialRef initialRef definterp 5)
   return (Explorer ref)
 
 mkExplorerExisting ::
   (Language p c o, Storable p c o) =>
-  FilePath -> -- Path to the SQLite database
-  (p -> c -> IO (Maybe c, o)) -> -- Interpreter
+  FilePath ->
+  (p -> c -> IO (Maybe c, o)) -> 
   IO (Explorer p c o)
 mkExplorerExisting path definterp = do
   diskStore <- DiskStore.initStore path False
-  cache <- LRU.newAtomicLRU (Just 10) -- TODO: 10 entries or more?
+  -- TODO: 10 entries or more for the cache? User configurable?
+  cache <- LRU.newAtomicLRU (Just 10)
   startRef <- fromMaybe initialRef <$> DiskStore.findHighestRef diskStore
   ref <- newIORef $ ExplorerState diskStore cache startRef startRef definterp 5
   
@@ -93,13 +96,13 @@ mkExplorerExisting path definterp = do
 closeExplorer :: Explorer p c o -> IO ()
 closeExplorer (Explorer stateRef) = readIORef stateRef >>= (DiskStore.closeStore . diskStore)
 
-fetchAndReconstruct ::
+reconstruct ::
   (Storable p c o) =>
   Ref ->
   ExplorerState p c o ->
   IORef (ExplorerState p c o) ->
   IO (Maybe (ExpNode p c o))
-fetchAndReconstruct ref state stateRef = do
+reconstruct ref state stateRef = do
   mRawData <- DiskStore.fetchNodeData (diskStore state) ref
   case mRawData of
     Nothing -> return Nothing
@@ -136,7 +139,7 @@ fetchAndReconstruct ref state stateRef = do
 getNodeIO :: (Storable p c o) => Ref -> IORef (ExplorerState p c o) -> IO (Maybe (ExpNode p c o))
 getNodeIO ref stateRef = do
   state <- readIORef stateRef
-  LRU.lookup ref (cache state) >>= maybe (fetchAndReconstruct ref state stateRef) (pure . Just)
+  LRU.lookup ref (cache state) >>= maybe (reconstruct ref state stateRef) (pure . Just)
 
 getConfigIO :: (Storable p c o) => Ref -> IORef (ExplorerState p c o) -> IO (Maybe c)
 getConfigIO ref stateRef = fmap nodeConfig <$> getNodeIO ref stateRef
