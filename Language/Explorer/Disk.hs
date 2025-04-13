@@ -7,6 +7,7 @@ module Language.Explorer.Disk where
 
 import Control.DeepSeq (NFData, rnf)
 import Control.Monad
+import Data.Binary (Binary)
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Aeson.Types (Result (Error, Success))
 import Data.Bifunctor (Bifunctor (second))
@@ -26,14 +27,12 @@ import qualified Language.Explorer.Tools.DiskStore as DiskStore
 type Language p c o = (Eq p, Eq o, Monoid o)
 
 type Storable p c o =
-  ( ToJSON p,
-    ToJSON c,
-    ToJSON o,
-    FromJSON p,
+  ( ToJSON c,
     FromJSON c,
-    FromJSON o,
-    Show p,
     Show c,
+    Binary p,
+    Show p,
+    Binary o,
     Show o
   )
 
@@ -91,7 +90,7 @@ fetchAndReconstruct ref state stateRef = do
   case mRawData of
     Nothing -> return Nothing
     Just (parentRef, isKeyframe, cBlob, mEdgeBlob) -> do
-      let mEdge = mEdgeBlob >>= (Diff.decompress >=> Diff.decodeJSON)
+      let mEdge = mEdgeBlob >>= (Diff.decompress >=> Diff.decodeBinary)
 
       mConfig <-
         if isKeyframe
@@ -150,7 +149,7 @@ execute p (Explorer stateRef) = do
           let newRef = genRef + 1
           let parent = currRef
           let checkpoint = False -- TODO: Implement checkpoint logic
-          let edgeBlob = Just (Diff.compress . Diff.encodeJSON $ Just (p, o))
+          let edgeBlob = Just (Diff.compress . Diff.encodeBinary $ Just (p, o))
 
           configBlob <-
             if checkpoint

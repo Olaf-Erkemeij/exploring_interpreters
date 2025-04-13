@@ -6,6 +6,8 @@ import Control.DeepSeq (NFData, rnf)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
 import qualified Codec.Compression.Zstd as Zstd
+import Data.Binary (Binary)
+import qualified Data.Binary as Binary
 
 instance NFData Patch
 instance NFData Operation
@@ -35,3 +37,12 @@ encodeJSON = BL.toStrict . encode
 
 decodeJSON :: FromJSON a => B.ByteString -> Maybe a
 decodeJSON = decodeStrict'
+
+encodeBinary :: Binary a => a -> B.ByteString
+encodeBinary = BL.toStrict . Binary.encode
+
+decodeBinary :: Binary a => B.ByteString -> Maybe a
+decodeBinary bs =
+    case Binary.decodeOrFail (BL.fromStrict bs) of
+        Left _ -> Nothing
+        Right (r, _, result) -> if BL.null r then Just result else Nothing

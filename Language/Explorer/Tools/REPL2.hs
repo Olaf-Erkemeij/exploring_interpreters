@@ -24,14 +24,12 @@ import qualified System.Console.Haskeline as Hl
 import Text.Read (readMaybe)
 
 type Storable p c o =
-  ( ToJSON p,
-    ToJSON c,
-    ToJSON o,
-    FromJSON p,
+  ( ToJSON c,
     FromJSON c,
-    FromJSON o,
-    Show p,
     Show c,
+    Binary p,
+    Show p,
+    Binary o,
     Show o
   )
 
