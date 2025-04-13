@@ -26,9 +26,9 @@ purgeFile path = do
   exists <- doesFileExist path
   when exists (removeFile path)
 
-initStore :: FilePath -> IO DiskStoreHandles
-initStore path = do
-  purgeFile path
+initStore :: FilePath -> Bool -> IO DiskStoreHandles
+initStore path purge = do
+  when purge (purgeFile path)
   conn <- open path
   execute_
     conn
@@ -84,3 +84,8 @@ findChildren :: DiskStoreHandles -> Ref -> IO [Ref]
 findChildren (DiskStoreHandles conn _) ref = do
   rows <- query conn "SELECT ref FROM History WHERE parent = ?" (Only ref)
   return $ map fromOnly rows
+
+findHighestRef :: DiskStoreHandles -> IO (Maybe Ref)
+findHighestRef (DiskStoreHandles conn _) = do
+  rows <- query_ conn "SELECT MAX(ref) FROM History"
+  return $ listToMaybe $ map fromOnly rows

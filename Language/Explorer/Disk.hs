@@ -41,7 +41,8 @@ data ExplorerState p c o = ExplorerState
     cache :: !(LRU.AtomicLRU Ref (ExpNode p c o)),
     currRef :: !Ref,
     genRef :: !Ref,
-    interpreter :: p -> c -> IO (Maybe c, o)
+    interpreter :: p -> c -> IO (Maybe c, o),
+    checkpointInterval :: !Int
   }
 
 data ExpNode p c o = ExpNode
@@ -65,7 +66,7 @@ mkExplorerIO ::
   c -> -- Initial configuration
   IO (Explorer p c o)
 mkExplorerIO path definterp conf = do
-  diskStore <- DiskStore.initStore path
+  diskStore <- DiskStore.initStore path True
   cache <- LRU.newAtomicLRU (Just 10) -- TODO: 10 entries or more?
   let edgeBlob = Nothing
   let configBlob = Diff.encodeJSON conf
@@ -73,7 +74,20 @@ mkExplorerIO path definterp conf = do
 
   DiskStore.writeNodeData diskStore initialRef 0 True configBlobCompressed edgeBlob
 
-  ref <- newIORef (ExplorerState diskStore cache initialRef initialRef definterp)
+  ref <- newIORef (ExplorerState diskStore cache initialRef initialRef definterp 5) -- TODO: Make adjustable
+  return (Explorer ref)
+
+mkExplorerExisting ::
+  (Language p c o, Storable p c o) =>
+  FilePath -> -- Path to the SQLite database
+  (p -> c -> IO (Maybe c, o)) -> -- Interpreter
+  IO (Explorer p c o)
+mkExplorerExisting path definterp = do
+  diskStore <- DiskStore.initStore path False
+  cache <- LRU.newAtomicLRU (Just 10) -- TODO: 10 entries or more?
+  startRef <- fromMaybe initialRef <$> DiskStore.findHighestRef diskStore
+  ref <- newIORef $ ExplorerState diskStore cache startRef startRef definterp 5
+  
   return (Explorer ref)
 
 closeExplorer :: Explorer p c o -> IO ()
@@ -115,7 +129,7 @@ fetchAndReconstruct ref state stateRef = do
 
       -- Combine results
       case (mConfig, mEdge) of
-        (Just c, Just edge) -> buildNode c (Just edge)
+        (Just c, Just edge) -> buildNode c edge
         (Just c, Nothing) | ref == initialRef -> buildNode c Nothing
         _ -> return Nothing
 
@@ -135,6 +149,16 @@ config (Explorer stateRef) = do
   ExplorerState {..} <- readIORef stateRef
   getConfigIO currRef stateRef >>= maybe (fail "Current configuration not found.") return
 
+getCache :: (Storable p c o) => Explorer p c o -> IO (LRU.AtomicLRU Ref (ExpNode p c o))
+getCache (Explorer stateRef) = do
+  ExplorerState {..} <- readIORef stateRef
+  return cache
+
+getCurrRef :: (Storable p c o) => Explorer p c o -> IO Ref
+getCurrRef (Explorer stateRef) = do
+  ExplorerState {..} <- readIORef stateRef
+  return currRef
+
 execute :: (Storable p c o) => p -> Explorer p c o -> IO o
 execute p (Explorer stateRef) = do
   state@ExplorerState {..} <- readIORef stateRef
@@ -148,7 +172,7 @@ execute p (Explorer stateRef) = do
         Just newconf -> do
           let newRef = genRef + 1
           let parent = currRef
-          let checkpoint = False -- TODO: Implement checkpoint logic
+          let checkpoint = (newRef - initialRef) `mod` checkpointInterval == 0
           let edgeBlob = Just (Diff.compress . Diff.encodeBinary $ Just (p, o))
 
           configBlob <-
