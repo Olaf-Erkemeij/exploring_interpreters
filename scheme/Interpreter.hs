@@ -1,19 +1,119 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Interpreter where
 
-import Abs
+import Abs ( Expr(..) )
 import qualified Data.Map as M
 import Control.Monad.State
-import Data.List
+import Data.List ( (\\) )
+import Control.DeepSeq (NFData)
+import GHC.Generics (Generic)
+
+import Data.Aeson (ToJSON, FromJSON)
+import Data.Binary (Binary)
+
+data LeafVal = IntLeaf Int | BoolLeaf Bool | StringLeaf String
+data Func = Head [String] Func
+  | Leaf String
+  | Monop String Func
+  | Binop String Func Func
+  | Ternop String Func Func Func
+  | ExprFunc [String] Expr
+  deriving (Eq, Show, Generic)
+
+instance NFData Func
+instance ToJSON Func
+instance FromJSON Func
+instance Binary Func
+
+plus :: Func
+plus = Head ["a", "b"] (Binop "+" (Leaf "a") (Leaf "b"))
+
+minus :: Func
+minus = Head ["a", "b"] (Binop "-" (Leaf "a") (Leaf "b"))
+
+times :: Func
+times = Head ["a", "b"] (Binop "*" (Leaf "a") (Leaf "b"))
+
+divide :: Func
+divide = Head ["a", "b"] (Binop "/" (Leaf "a") (Leaf "b"))
+
+lessThan :: Func
+lessThan = Head ["a", "b"] (Binop "<" (Leaf "a") (Leaf "b"))
+
+ifFunc :: Func
+ifFunc = Head ["cond", "a", "b"] (Ternop "if" (Leaf "cond") (Leaf "a") (Leaf "b"))
+
+display :: Func
+display = Head ["a"] (Monop "display" (Leaf "a"))
+
+modifyEnv :: Env -> [(String, Value)] -> EvalM Value -> EvalM Value
+modifyEnv baseEnv bindings comp = do
+  oldCtx <- get
+  let newEnv = M.union (M.fromList bindings) baseEnv
+  put oldCtx { env = newEnv }
+  result <- comp
+  newOut <- gets out
+  put oldCtx { out = newOut }
+  return result
+
+evaluate :: Func -> [Value] -> EvalM Value
+evaluate (Head args f) vals = do
+  when (length args /= length vals) $ error "Wrong number of arguments"
+  curEnv <- gets env
+  modifyEnv curEnv (zip args vals) (evaluate' f)
+evaluate (ExprFunc args body) vals = do
+  when (length args /= length vals) $ error "Wrong number of arguments"
+  curEnv <- gets env
+  modifyEnv curEnv (zip args vals) (eval body)
+evaluate _ _ = error "Invalid function"
+
+evaluate' :: Func -> EvalM Value
+evaluate' (Leaf s) = do
+  curEnv <- gets env
+  case M.lookup s curEnv of
+    Just val -> return val
+    Nothing  -> error ("Undefined symbol: " ++ s)
+evaluate' (Binop op a b) = do
+  a' <- evaluate' a
+  b' <- evaluate' b
+  case op of
+    "+" -> numFunc sum [a', b']
+    "*" -> numFunc product [a', b']
+    "-" -> numFunc (\[x, y] -> x - y) [a', b']
+    "/" -> numFunc (\[x, y] -> x `div` y) [a', b']
+    "<" -> boolFunc (<) [a', b']
+    _ -> error "Invalid operator"
+evaluate' (Monop op a) = do
+  a' <- evaluate' a
+  case op of
+    "display" -> do
+      modify $ \ctx -> ctx { out = out ctx ++ [show a' ++ "\n"] }
+      return Void
+    "not" -> BoolVal . not <$> fromBool a'
+    _ -> error "Invalid operator"
+evaluate' (Ternop op cond a b) = case op of
+  "if" -> do
+    cond' <- evaluate' cond
+    case cond' of
+      BoolVal True -> evaluate' a
+      BoolVal False -> evaluate' b
+      _ -> error "Condition in if must be a boolean"
+  _ -> error "Invalid operator"
+evaluate' _ = error "Invalid function"
 
 data Value
   = Void
   | BoolVal Bool
   | IntVal Int
   | StringVal String
-  | FunVal ([Value] -> EvalM Value)
+  | FunVal Func
   | ListValue [Value]
-  | LambdaVal [String] Expr Context
+  deriving (Eq, Generic)
+
+instance NFData Value
+instance ToJSON Value
+instance FromJSON Value
+instance Binary Value
 
 instance Show Value where
   show Void = "<void>"
@@ -22,7 +122,20 @@ instance Show Value where
   show (StringVal s) = show s
   show (FunVal _) = "<function>"
   show (ListValue xs) = "(" ++ unwords (map show xs) ++ ")"
-  show (LambdaVal args _ _) = "<lambda: " ++ unwords args ++ ">"
+
+prettyPrint :: Value -> String
+prettyPrint (ListValue xs) = "(" ++ unwords (map prettyPrint xs) ++ ")\n"
+prettyPrint Void = ""
+prettyPrint (FunVal _) = ""
+prettyPrint x = show x ++ "\n"
+
+prettyPrintExpr :: Expr -> String
+prettyPrintExpr (Integer i) = show i
+prettyPrintExpr (Boolean b) = if b then "true" else "false"
+prettyPrintExpr (String s) = show s
+prettyPrintExpr (Symbol s) = s
+prettyPrintExpr (Lambda args body) = "(lambda (" ++ unwords args ++ ") " ++ prettyPrintExpr body ++ ")"
+prettyPrintExpr (List xs) = "(" ++ unwords (map prettyPrintExpr xs) ++ ")"
 
 type Env = M.Map String Value
 type EvalM = State Context
@@ -31,6 +144,12 @@ data Context = Context
   { env :: Env
   , out :: [String]
   }
+  deriving (Eq, Show, Generic)
+
+instance NFData Context
+instance ToJSON Context
+instance FromJSON Context
+instance Binary Context
 
 fromInt :: Value -> EvalM Int
 fromInt (IntVal i) = return i
@@ -49,32 +168,13 @@ boolFunc _ _ = error "Invalid arguments to function"
 
 builtins :: Env
 builtins = M.fromList
-    [ ("+", FunVal $ numFunc sum)
-    , ("-", FunVal $ numFunc $ \case [x] -> -x; xs -> foldl1 (-) xs)
-    , ("*", FunVal $ numFunc product)
-    , ("<", FunVal $ boolFunc (<))
-    , (">", FunVal $ boolFunc (>))
-    , ("<=", FunVal $ boolFunc (<=))
-    , (">=", FunVal $ boolFunc (>=))
-    , ("=", FunVal $ boolFunc (==))
-    , ("if", FunVal $ \case
-        [BoolVal b, t, f] -> return (if b then t else f)
-        _ -> error "Invalid arguments to function")
-    , ("list", FunVal $ return . ListValue)
-    , ("cons", FunVal $ \case
-        [x, ListValue xs] -> return (ListValue (x : xs))
-        _ -> error "Invalid arguments to function")
-    , ("car", FunVal $ \case
-        [ListValue (x : _)] -> return x
-        _ -> error "Invalid arguments to function")
-    , ("cdr", FunVal $ \case
-        [ListValue (_ : xs)] -> return (ListValue xs)
-        _ -> error "Invalid arguments to function")
-    , ("display", FunVal $ \case
-        [x] -> do
-          modify $ \ctx -> ctx { out = out ctx ++ [show x ++ "\n"] }
-          return Void
-        _ -> error "Invalid arguments to function")
+    [ ("+", FunVal plus)
+    , ("*", FunVal times)
+    , ("-", FunVal minus)
+    , ("/", FunVal divide)
+    , ("<", FunVal lessThan)
+    , ("if", FunVal ifFunc)
+    , ("display", FunVal display)
     ]
 
 initialContext :: Context
@@ -96,31 +196,16 @@ eval (List [Symbol "define", Symbol var, expr]) = do
   val <- eval expr
   modify $ \ctx -> ctx { env = M.insert var val (env ctx) }
   return val
-eval (Lambda args body) = do
-  gets (LambdaVal args body)
+eval (Lambda args body) = return (FunVal (ExprFunc args body))
 eval (List (func : args)) = do
   f <- eval func
   argVals <- mapM eval args
-  apply f argVals
+  case f of
+    FunVal f' -> evaluate f' argVals
+    _ -> error "Not a function"
 eval expr@(List _) = error $ "Unimplemented list operation: " ++ show expr
-
-apply :: Value -> [Value] -> EvalM Value
-apply (FunVal f) args = f args
-apply (LambdaVal params body closure) args = do
-  when (length params /= length args) $ error "Wrong number of arguments"
-
-  let closureEnv = env closure
-  let newEnv = M.union (M.fromList (zip params args)) closureEnv
-
-  oldEnv <- get
-  put $ oldEnv { env = newEnv }
-  result <- eval body
-  put oldEnv
-  return result
-
-apply _ _ = error "Not a function"
 
 runExpr :: Expr -> Context -> IO (Maybe Context, [String])
 runExpr expr ctx = do
-  let (_, ctx') = runState (eval expr) ctx
-  return (Just ctx', out ctx' \\ out ctx)
+  let (v, ctx') = runState (eval expr) ctx
+  return (Just ctx', (out ctx' \\ out ctx) ++ [prettyPrint v])

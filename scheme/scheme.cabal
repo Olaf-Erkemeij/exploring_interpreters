@@ -32,5 +32,10 @@ executable scheme
                 , deepseq
                 , ghc-datasize
                 , regex-applicative
+                , unordered-containers
+                , fgl
+                , binary
+                , unix-compat
 
     default-language: Haskell2010
+    ghc-options:      -Wall -threaded -rtsopts -with-rtsopts=-N
