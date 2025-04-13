@@ -1,0 +1,215 @@
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE RecordWildCards #-}
+
+module Language.Explorer.Disk where
+
+import Control.DeepSeq (NFData, rnf)
+import Control.Monad
+import Data.Aeson (FromJSON, ToJSON)
+import Data.Aeson.Types (Result (Error, Success))
+import Data.Bifunctor (Bifunctor (second))
+import Data.ByteString (ByteString)
+import qualified Data.Cache.LRU.IO as LRU
+import Data.Foldable (foldlM)
+import Data.IORef (IORef, atomicModifyIORef', newIORef, readIORef)
+import qualified Data.IntMap.Strict as IntMap
+import Data.List (foldl')
+import Data.Maybe (fromJust, fromMaybe, isNothing, mapMaybe, maybeToList)
+import qualified Data.Set as Set
+import Data.Tree (Tree (..))
+import qualified Language.Explorer.Tools.Diff as Diff
+import Language.Explorer.Tools.DiskStore (Ref)
+import qualified Language.Explorer.Tools.DiskStore as DiskStore
+
+type Language p c o = (Eq p, Eq o, Monoid o)
+
+type Storable p c o =
+  ( ToJSON p,
+    ToJSON c,
+    ToJSON o,
+    FromJSON p,
+    FromJSON c,
+    FromJSON o,
+    Show p,
+    Show c,
+    Show o
+  )
+
+data ExplorerState p c o = ExplorerState
+  { diskStore :: !DiskStore.DiskStoreHandles,
+    cache :: !(LRU.AtomicLRU Ref (ExpNode p c o)),
+    currRef :: !Ref,
+    genRef :: !Ref,
+    interpreter :: p -> c -> IO (Maybe c, o)
+  }
+
+data ExpNode p c o = ExpNode
+  { nodeConfig :: !c,
+    nodeParent :: !Ref,
+    nodeEdge :: !(Maybe (p, o))
+  }
+
+instance (NFData c, NFData p, NFData o) => NFData (ExpNode p c o) where
+  rnf (ExpNode c p e) = rnf c `seq` rnf p `seq` rnf e
+
+newtype Explorer p c o = Explorer (IORef (ExplorerState p c o))
+
+initialRef :: Int
+initialRef = 1
+
+mkExplorerIO ::
+  (Language p c o, Storable p c o) =>
+  FilePath -> -- Path to the SQLite database
+  (p -> c -> IO (Maybe c, o)) -> -- Interpreter
+  c -> -- Initial configuration
+  IO (Explorer p c o)
+mkExplorerIO path definterp conf = do
+  diskStore <- DiskStore.initStore path
+  cache <- LRU.newAtomicLRU (Just 10) -- TODO: 10 entries or more?
+  let edgeBlob = Nothing
+  let configBlob = Diff.encodeJSON conf
+  let configBlobCompressed = Diff.compress configBlob
+
+  DiskStore.writeNodeData diskStore initialRef 0 True configBlobCompressed edgeBlob
+
+  ref <- newIORef (ExplorerState diskStore cache initialRef initialRef definterp)
+  return (Explorer ref)
+
+closeExplorer :: Explorer p c o -> IO ()
+closeExplorer (Explorer stateRef) = readIORef stateRef >>= (DiskStore.closeStore . diskStore)
+
+fetchAndReconstruct ::
+  (Storable p c o) =>
+  Ref ->
+  ExplorerState p c o ->
+  IORef (ExplorerState p c o) ->
+  IO (Maybe (ExpNode p c o))
+fetchAndReconstruct ref state stateRef = do
+  mRawData <- DiskStore.fetchNodeData (diskStore state) ref
+  case mRawData of
+    Nothing -> return Nothing
+    Just (parentRef, isKeyframe, cBlob, mEdgeBlob) -> do
+      let mEdge = mEdgeBlob >>= (Diff.decompress >=> Diff.decodeJSON)
+
+      mConfig <-
+        if isKeyframe
+          then return $ Diff.decompress cBlob >>= Diff.decodeJSON
+          else do
+            mParentConfig <- getConfigIO parentRef stateRef
+            case mParentConfig of
+              Nothing -> return Nothing
+              Just cParent -> do
+                let mPatched = do
+                      patchBlob <- Diff.decompress cBlob
+                      patchData <- Diff.decodeJSON patchBlob
+                      case Diff.patchObject cParent patchData of
+                        Error _ -> Nothing
+                        Success cPatched -> Just cPatched
+                return mPatched
+
+      let buildNode c edge = do
+            let node = ExpNode c parentRef edge
+            LRU.insert ref node (cache state)
+            return $ Just node
+
+      -- Combine results
+      case (mConfig, mEdge) of
+        (Just c, Just edge) -> buildNode c (Just edge)
+        (Just c, Nothing) | ref == initialRef -> buildNode c Nothing
+        _ -> return Nothing
+
+getNodeIO :: (Storable p c o) => Ref -> IORef (ExplorerState p c o) -> IO (Maybe (ExpNode p c o))
+getNodeIO ref stateRef = do
+  state <- readIORef stateRef
+  LRU.lookup ref (cache state) >>= maybe (fetchAndReconstruct ref state stateRef) (pure . Just)
+
+getConfigIO :: (Storable p c o) => Ref -> IORef (ExplorerState p c o) -> IO (Maybe c)
+getConfigIO ref stateRef = fmap nodeConfig <$> getNodeIO ref stateRef
+
+deref :: Storable p c o => Explorer p c o -> Ref -> IO (Maybe c)
+deref (Explorer stateRef) ref = getConfigIO ref stateRef
+
+config :: (Storable p c o) => Explorer p c o -> IO c
+config (Explorer stateRef) = do
+  ExplorerState {..} <- readIORef stateRef
+  getConfigIO currRef stateRef >>= maybe (fail "Current configuration not found.") return
+
+execute :: (Storable p c o) => p -> Explorer p c o -> IO o
+execute p (Explorer stateRef) = do
+  state@ExplorerState {..} <- readIORef stateRef
+  mConfig <- getConfigIO currRef stateRef
+  case mConfig of
+    Nothing -> error "Configuration not found."
+    Just conf -> do
+      (mcfg, o) <- interpreter p conf
+      case mcfg of
+        Nothing -> return o
+        Just newconf -> do
+          let newRef = genRef + 1
+          let parent = currRef
+          let checkpoint = False -- TODO: Implement checkpoint logic
+          let edgeBlob = Just (Diff.compress . Diff.encodeJSON $ Just (p, o))
+
+          configBlob <-
+            if checkpoint
+              then return $ Diff.compress . Diff.encodeJSON $ newconf
+              else return $ Diff.compress . Diff.encodeJSON $ Diff.computeDiff conf newconf
+
+          DiskStore.writeNodeData diskStore newRef parent checkpoint configBlob edgeBlob
+
+          let node = ExpNode newconf parent (Just (p, o))
+          LRU.insert newRef node cache
+
+          atomicModifyIORef' stateRef $ \s -> (s {currRef = newRef, genRef = newRef}, o)
+
+executeAll :: (Storable p c o, Monoid o) => [p] -> Explorer p c o -> IO o
+executeAll ps explorer = foldM (\acc p -> (acc <>) <$> execute p explorer) mempty ps
+
+revert :: (Storable p c o) => Ref -> Explorer p c o -> IO Bool
+revert targetRef (Explorer stateRef) = do
+  state@ExplorerState {..} <- readIORef stateRef
+  if targetRef == currRef
+    then return True
+    else do
+      mPath <- findAncestryPath currRef targetRef [] stateRef
+      case mPath of
+        Nothing -> return False
+        Just nodesToDelete -> do
+          DiskStore.deleteNodes diskStore nodesToDelete
+          forM_ nodesToDelete (`LRU.delete` cache)
+          atomicModifyIORef' stateRef $ \s -> (s {currRef = targetRef}, ())
+          return True
+
+findAncestryPath :: (Storable p c o) => Ref -> Ref -> [Ref] -> IORef (ExplorerState p c o) -> IO (Maybe [Ref])
+findAncestryPath start end acc stateRef
+  | start == end = return $ Just acc
+  | start == 0 = return Nothing
+  | otherwise =
+      getNodeIO start stateRef >>= \case
+        Nothing -> pure Nothing
+        Just node -> findAncestryPath (nodeParent node) end (start : acc) stateRef
+
+jump :: (Storable p c o) => Ref -> Explorer p c o -> IO Bool
+jump targetRef (Explorer stateRef) = do
+  state@ExplorerState {..} <- readIORef stateRef
+  if targetRef == currRef
+    then return True
+    else
+      getNodeIO targetRef stateRef >>= \case
+        Nothing -> return False
+        Just _ -> do
+          atomicModifyIORef' stateRef $ \s -> (s {currRef = targetRef}, ())
+          return True
+
+toTree :: (Storable p c o) => Explorer p c o -> IO (Tree (Ref, c))
+toTree exp@(Explorer stateRef) = do
+  ExplorerState {..} <- readIORef stateRef
+  let buildNodeIO ref =
+        getNodeIO ref stateRef >>= \case
+          Nothing -> error $ "toTree: Cannot find node for ref " ++ show ref
+          Just node -> do
+            childTrees <- mapM buildNodeIO =<< DiskStore.findChildren diskStore ref
+            return $ Node (ref, nodeConfig node) childTrees
+  buildNodeIO initialRef
