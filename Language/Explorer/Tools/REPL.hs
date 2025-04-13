@@ -1,3 +1,5 @@
+{-# LANGUAGE ConstraintKinds #-}
+
 module Language.Explorer.Tools.REPL where
 
 import Control.Monad.IO.Class (MonadIO(..))
@@ -12,8 +14,11 @@ import Text.Read (readMaybe)
 import Control.Arrow (Arrow(first))
 import Control.Monad.Trans
 import Control.Monad.Catch
+import Data.Binary (Binary)
+import Data.Aeson (ToJSON, FromJSON)
 
-
+-- type Conf c = (ToJSON c, FromJSON c, Binary c)
+type Conf c = Show c
 type MetaTable p m c o = [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
 type RParser e p c = String -> c -> Either e p
 type Prompt p m c o = Explorer p m c o -> String
@@ -22,14 +27,14 @@ type OutputHandler m o = o -> m ()
 type Repl e p m c o = Prompt p m c o -> RParser e p c -> String -> MetaTable p m c o -> MetaHandler p m c o -> OutputHandler m o -> Explorer p m c o -> m ()
 
 
-handleJump :: MonadIO m => String -> Explorer p m c o -> m (Explorer p m c o)
+handleJump :: (MonadIO m, Eq p, Eq o, Monoid o, Conf c) => String -> Explorer p m c o -> m (Explorer p m c o)
 handleJump input ex = case readMaybe (dropWhile isSpace input) of
   (Just ref_id) -> case jump ref_id ex of
     (Just ex') -> return ex'
     Nothing -> liftIO $ putStrLn "Given reference is not in the exploration tree." >> return ex
   Nothing -> liftIO $ putStrLn "the jump command requires an integer argument." >> return ex
 
-handleRevert :: MonadIO m => MetaHandler p m c o
+handleRevert :: (MonadIO m, Eq p, Eq o, Monoid o, Conf c) => MetaHandler p m c o
 handleRevert input ex = case readMaybe (dropWhile isSpace input) of
   (Just ref_id) -> case revert ref_id ex of
     (Just ex') -> do
@@ -38,21 +43,21 @@ handleRevert input ex = case readMaybe (dropWhile isSpace input) of
     Nothing -> liftIO $ putStrLn "Given reference is not valid for reverting." >> return ex
   Nothing -> liftIO $ putStrLn "the jump command requires an integer argument." >> return ex
 
-handleTree :: MonadIO m => MetaHandler p m c o
+handleTree :: (MonadIO m, Eq p, Eq o, Monoid o, Conf c) => MetaHandler p m c o
 handleTree input ex = do
   liftIO $ putStrLn . drawTree $ fmap (show . fst) (toTree ex)
   return ex
 
-metaTable :: MonadIO m => [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
+metaTable :: (MonadIO m, Eq p, Eq o, Monoid o, Conf c) => [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
 metaTable = [
   ("jump", handleJump),
   ("revert", handleRevert),
   ("tree", handleTree)]
 
-constructMetaTable :: MonadIO m => String -> [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
+constructMetaTable :: (MonadIO m, Eq p, Eq o, Monoid o, Conf c) => String -> [(String, String -> Explorer p m c o -> m (Explorer p m c o))]
 constructMetaTable prefix = map (first (prefix ++ )) metaTable
 
-repl :: (Show e, Eq p, Eq o, Monoid o, MonadIO m, MonadMask m) => Repl e p m c o
+repl :: (Show e, Show o, Eq p, Eq o, Monoid o, MonadIO m, MonadMask m, Conf c) => Repl e p m c o
 repl prompt parser metaPrefix metaTable metaHandler outputHandler ex =
   Hl.runInputT Hl.defaultSettings (loop ex)
     where
