@@ -36,13 +36,20 @@ type Storable p c o =
     Show o
   )
 
+data ExplorerSettings = ExplorerSettings
+  { checkpointInterval :: !Int,
+    cacheSize :: !Integer,
+    compressionLevel :: !Int
+  }
+
 data ExplorerState p c o = ExplorerState
   { diskStore :: !DiskStore.DiskStoreHandles,
     cache :: !(LRU.AtomicLRU Ref (ExpNode p c o)),
     currRef :: !Ref,
     genRef :: !Ref,
     interpreter :: p -> c -> IO (Maybe c, o),
-    checkpointInterval :: !Int
+    checkpoint :: !Int,
+    compression :: !Int
   }
 
 data ExpNode p c o = ExpNode
@@ -56,41 +63,65 @@ instance (NFData c, NFData p, NFData o) => NFData (ExpNode p c o) where
 
 newtype Explorer p c o = Explorer (IORef (ExplorerState p c o))
 
+defaultSettings :: ExplorerSettings
+defaultSettings =
+  ExplorerSettings
+    { checkpointInterval = 5,
+      cacheSize = 10,
+      compressionLevel = 3
+    }
+
 initialRef :: Int
 initialRef = 1
 
 mkExplorerIO ::
   (Language p c o, Storable p c o) =>
+  ExplorerSettings ->
   FilePath ->
-  (p -> c -> IO (Maybe c, o)) -> 
-  c -> 
+  (p -> c -> IO (Maybe c, o)) ->
+  c ->
   IO (Explorer p c o)
-mkExplorerIO path definterp conf = do
+mkExplorerIO settings path definterp conf = do
   diskStore <- DiskStore.initStore path True
-  -- TODO: 10 entries or more for the cache? User configurable?
-  cache <- LRU.newAtomicLRU (Just 10)
+  cache <- LRU.newAtomicLRU (Just (cacheSize settings))
   let edgeBlob = Nothing
   let configBlob = Diff.encodeJSON conf
-  let configBlobCompressed = Diff.compress configBlob
+  let configBlobCompressed = Diff.compress (compressionLevel settings) configBlob
 
   DiskStore.writeNodeData diskStore initialRef 0 True configBlobCompressed edgeBlob
 
-  -- TODO: Adjustable checkpoint system
-  ref <- newIORef (ExplorerState diskStore cache initialRef initialRef definterp 5)
+  ref <- newIORef $ ExplorerState {
+    diskStore = diskStore,
+    cache = cache,
+    currRef = initialRef,
+    genRef = initialRef,
+    interpreter = definterp,
+    checkpoint = checkpointInterval settings,
+    compression = compressionLevel settings
+  }
   return (Explorer ref)
 
 mkExplorerExisting ::
   (Language p c o, Storable p c o) =>
+  ExplorerSettings ->
   FilePath ->
-  (p -> c -> IO (Maybe c, o)) -> 
+  (p -> c -> IO (Maybe c, o)) ->
   IO (Explorer p c o)
-mkExplorerExisting path definterp = do
+mkExplorerExisting settings path definterp = do
   diskStore <- DiskStore.initStore path False
-  -- TODO: 10 entries or more for the cache? User configurable?
   cache <- LRU.newAtomicLRU (Just 10)
   startRef <- fromMaybe initialRef <$> DiskStore.findHighestRef diskStore
-  ref <- newIORef $ ExplorerState diskStore cache startRef startRef definterp 5
-  
+
+  ref <- newIORef $ ExplorerState {
+    diskStore = diskStore,
+    cache = cache,
+    currRef = startRef,
+    genRef = startRef,
+    interpreter = definterp,
+    checkpoint = checkpointInterval settings,
+    compression = compressionLevel settings
+  }
+
   return (Explorer ref)
 
 closeExplorer :: Explorer p c o -> IO ()
@@ -175,15 +206,14 @@ execute p (Explorer stateRef) = do
         Just newconf -> do
           let newRef = genRef + 1
           let parent = currRef
-          let checkpoint = (newRef - initialRef) `mod` checkpointInterval == 0
-          let edgeBlob = Just (Diff.compress . Diff.encodeBinary $ Just (p, o))
+          let isCheckpoint = (newRef - initialRef) `mod` checkpoint == 0
+          let edgeBlob = Just (Diff.compress compression . Diff.encodeBinary $ Just (p, o))
 
-          configBlob <-
-            if checkpoint
-              then return $ Diff.compress . Diff.encodeJSON $ newconf
-              else return $ Diff.compress . Diff.encodeJSON $ Diff.computeDiff conf newconf
+          let configBlob = if isCheckpoint
+              then Diff.compress compression . Diff.encodeJSON $ newconf
+              else Diff.compress compression . Diff.encodeJSON $ Diff.computeDiff conf newconf
 
-          DiskStore.writeNodeData diskStore newRef parent checkpoint configBlob edgeBlob
+          DiskStore.writeNodeData diskStore newRef parent isCheckpoint configBlob edgeBlob
 
           let node = ExpNode newconf parent (Just (p, o))
           LRU.insert newRef node cache

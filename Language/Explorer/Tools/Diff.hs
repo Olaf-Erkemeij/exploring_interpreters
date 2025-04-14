@@ -14,17 +14,14 @@ instance NFData Operation
 instance NFData Pointer
 instance NFData Key
 
-defaultCompressionLevel :: Int
-defaultCompressionLevel = 3
-
 computeDiff  :: (ToJSON a, FromJSON a) => a -> a -> Patch
 computeDiff a b = diff (toJSON a) (toJSON b)
 
 patchObject :: (ToJSON a, FromJSON a) => a -> Patch -> Result a
 patchObject a p = patch p (toJSON a) >>= fromJSON
 
-compress :: B.ByteString -> B.ByteString
-compress = Zstd.compress defaultCompressionLevel
+compress :: Int -> B.ByteString -> B.ByteString
+compress = Zstd.compress
 
 decompress :: B.ByteString -> Maybe B.ByteString
 decompress bs =
