@@ -4,23 +4,21 @@ import GLL.Combinators as C
 -- import Interpreter
 -- import JSON
 import Abs
-import qualified Language.Explorer.Monadic5 as EM1
+import qualified Language.Explorer.Monadic as EM1
 import Language.Explorer.Monadic as EM
 import Language.Explorer.Tools.Protocol
 import Language.Explorer.Tools.REPL
 import Language.Explorer.Tools.Diff
 import Data.Char (isDigit, isAlpha, isLower)
 import Text.Regex.Applicative as RE
-import Test.QuickCheck
-import GHC.DataSize
+import Test.QuickCheck ( choose, generate )
+import GHC.DataSize ( recursiveSizeNF )
 import Data.Tree (drawTree)
 import Control.Monad
 import System.IO
-import Interpreter
-import Interpreter (initialContext)
+import Interpreter ( runExpr, initialContext, Context )
 
-import qualified Data.IntMap as IntMap
-import Data.Graph.Inductive.Query.BFS
+import System.PosixCompat
 
 import qualified Language.Explorer.Disk as ED
 import qualified Language.Explorer.Tools.REPL2 as REPL2
@@ -88,7 +86,7 @@ schemeREPL2 = do
   let metaTable = REPL2.metaTable
   let metaHandler _ ex = return ()
   let outputHandler = putStr . concat
-  explorer <- ED.mkExplorerIO "scheme.db" runExpr initialContext
+  explorer <- ED.mkExplorerIO ED.defaultSettings "scheme.db" runExpr initialContext
   REPL2.repl prompt parser metaPrefix metaTable metaHandler outputHandler explorer
 
 initialContext' :: IO Context
@@ -156,8 +154,8 @@ measureExplorer n p = do
   -- print $ "Total size: " ++ show size1
 
 -- TESTING: COMPARE VERSIONS ON THE SAME TREE
-randomTreeTwo :: Int -> Float -> IO (IO (Explorer Expr IO Context [String]), IO (EM1.Explorer Expr IO Context [String]))
-randomTreeTwo 1 _ = return (EM.mkExplorerNoSharing runExpr <$> initialContext', EM1.mkExplorerNoSharing runExpr <$> initialContext')
+randomTreeTwo :: Int -> Float -> IO (IO (ED.Explorer Expr Context [String]), IO (EM1.Explorer Expr IO Context [String]))
+randomTreeTwo 1 _ = return (ED.mkExplorerIO ED.defaultSettings "scheme.db" runExpr initialContext, EM1.mkExplorerNoSharing runExpr <$> initialContext')
 randomTreeTwo n p = do
   (exp1, exp2) <- randomTreeTwo (n - 1) p
   explr <- exp1
@@ -168,36 +166,32 @@ randomTreeTwo n p = do
   (explr', explr2') <-
     if jumpCond <= p
       then do
-        jumpRef <- generate (choose (1, EM.currRef explr - 1))
-        case (EM.jump jumpRef explr, EM1.jump jumpRef explr2) of
-          (Just newExplr, Just newExplr2) -> return (newExplr, newExplr2)
+        jumpRef <- generate (choose (1, EM1.currRef explr2 - 1))
+        jumped <- ED.jump jumpRef explr
+        case (jumped, EM1.jump jumpRef explr2) of
+          (True, Just newExplr2) -> return (explr, newExplr2)
           _ -> return (explr, explr2)
       else return (explr, explr2)
-  
-  (newExplr, _) <- EM.execute randExpr explr'
+
+  _ <- ED.execute randExpr explr'
   (newExplr2, _) <- EM1.execute randExpr explr2'
 
-  return (return newExplr, return newExplr2)
+  return (return explr, return newExplr2)
 
 measureExplorerTwo :: Int -> Float -> IO()
 measureExplorerTwo n p = do
-  (tree4, tree1) <- randomTreeTwo n p
-  explr4 <- tree4
+  (_, tree1) <- randomTreeTwo n p
   explr1 <- tree1
-  size1 <- recursiveSizeNF (EM.cmap explr4)
-  size2 <- recursiveSizeNF (EM.execEnv explr4)
+  size2 <- fileSize <$> getFileStatus "scheme.db"
+  size3 <- recursiveSizeNF (EM1.execEnv explr1)
+  size4 <- recursiveSizeNF (EM1.cmap explr1)
 
-  size3 <- recursiveSizeNF (EM1.history explr1)
-  -- size4 <- recursiveSizeNF (EM1.execEnv explr1)
+  putStrLn   "         Disk  vs  Memory"
+  putStrLn $ "Total:   " ++ show size2 ++ " vs " ++ show (size3 + size4)
 
-  putStrLn $ "         Monadic1 vs Monadic"
-  putStrLn $ "CMap:    " ++ show size1 ++ " vs " ++ show size3
-  putStrLn $ "ExecEnv: " ++ show size2 ++ " vs " ++ show size3
-  putStrLn $ "Total:   " ++ show (size1 + size2) ++ " vs " ++ show size3
-
-  let total1 = size1 + size2
-  let total2 = size3
+  let total1 = toInteger size2
+  let total2 = toInteger size3 + toInteger size4
 
   if total1 < total2
-    then putStrLn $ "EM is smaller: " 
-    else putStrLn $ "EM1 is smaller: "
+    then putStrLn "Disk is smaller"
+    else putStrLn "Memory is smaller"

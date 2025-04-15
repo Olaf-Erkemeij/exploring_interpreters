@@ -36,6 +36,7 @@ executable scheme
                 , fgl
                 , binary
                 , unix-compat
+                , criterion
 
     default-language: Haskell2010
     ghc-options:      -Wall -threaded -rtsopts -with-rtsopts=-N
