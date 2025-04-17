@@ -36,10 +36,11 @@ import Data.Graph.Inductive.Query
 import Data.Graph.Inductive.Query.SP
 import Data.Tree (Tree(..))
 
-import qualified Data.IntMap as IntMap
+import qualified Data.IntMap.Strict as IntMap
 import Data.List
 import Data.Foldable
 import Data.Maybe
+import Control.DeepSeq (NFData, rnf)
 
 type Ref = Int
 type Language p m c o = (Eq p, Eq o, Monad m, Monoid o)
@@ -47,13 +48,15 @@ type Language p m c o = (Eq p, Eq o, Monad m, Monoid o)
 data Explorer programs m configs output where
     Explorer :: Language programs m configs output =>
         { defInterp :: programs -> configs -> m (Maybe configs, output)
-        , config :: configs
-        , currRef :: Ref
-        , genRef :: Ref
-        , cmap :: IntMap.IntMap configs
-        , execEnv :: Gr Ref (programs, output)
+        , config :: !configs
+        , currRef :: !Ref
+        , genRef :: !Ref
+        , cmap :: !(IntMap.IntMap configs)
+        , execEnv :: !(Gr Ref (programs, output))
         } -> Explorer programs m configs output
 
+instance (NFData programs, NFData configs, NFData output) => NFData (Explorer programs m configs output) where
+  rnf (Explorer _ _ _ _ cmap execEnv) = rnf cmap `seq` rnf execEnv
 
 mkExplorer :: Language p m c o => Bool -> (c -> c -> Bool) -> (p -> c -> m (Maybe c, o)) -> c -> Explorer p m c o
 mkExplorer shadow shadowEq definterp conf = Explorer
@@ -73,9 +76,6 @@ mkExplorerNoSharing = mkExplorer False (\_ _ -> False)
 
 deref :: Explorer p m c o -> Ref -> Maybe c
 deref e r = IntMap.lookup r (cmap e)
-
-findRef :: Explorer p m c o -> c -> (c -> Bool) -> Maybe (Ref, c)
-findRef e c eq = find (\(r, c') -> eq c') (IntMap.toList (cmap e))
 
 addNewPath :: Explorer p m c o -> p -> o -> c -> Explorer p m c o
 addNewPath e p o c = e { config = c, currRef = newref, genRef = newref, cmap = IntMap.insert newref c (cmap e),
@@ -175,8 +175,6 @@ getPathFromTo exp from to =
   case getPathsFromTo exp from to of
     [] -> []
     (x:_) -> x
-
-
 
 executionGraph :: Explorer p m c o -> ((Ref, c), [(Ref, c)], [((Ref, c), (p, o), (Ref, c))])
 executionGraph exp =
