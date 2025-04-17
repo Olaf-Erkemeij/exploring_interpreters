@@ -55,7 +55,6 @@ data Explorer programs m configs output where
         , cmap :: !(IntMap.IntMap configs)
         , parents :: !(IntMap.IntMap (Ref, (programs, output)))
         , children :: !(IntMap.IntMap [(Ref, (programs, output))])
-        , configEq :: configs -> configs -> Bool
         } -> Explorer programs m configs output
 
 mkExplorer :: Language p m c o => Bool -> (c -> c -> Bool) -> (p -> c -> m (Maybe c, o)) -> c -> Explorer p m c o
@@ -67,7 +66,6 @@ mkExplorer shadow shadowEq definterp conf = Explorer
     , cmap = IntMap.fromList [(initialRef, conf)]
     , parents = IntMap.empty
     , children = IntMap.empty
-    , configEq = shadowEq
 }
 
 initialRef :: Int
@@ -79,16 +77,8 @@ mkExplorerNoSharing = mkExplorer False (\_ _ -> False)
 deref :: Explorer p m c o -> Ref -> Maybe c
 deref e r = IntMap.lookup r (cmap e)
 
-findRef :: Explorer p m c o -> c -> (c -> Bool) -> Maybe (Ref, c)
-findRef e c eq = find (\(r, c') -> eq c') (IntMap.toList (cmap e))
-
 addNewPath :: Explorer p m c o -> p -> o -> c -> Explorer p m c o
-addNewPath e p o c = case findRef e c (configEq e c) of
-    Just (existingRef, _) -> e
-        { currRef = existingRef
-        , children = IntMap.insertWith (++) (currRef e) [(existingRef, (p, o))] (children e)
-        }
-    Nothing -> e
+addNewPath e p o c = e
         { config = c
         , currRef = newRef
         , genRef = newRef
