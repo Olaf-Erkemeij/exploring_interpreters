@@ -30,6 +30,7 @@ initStore :: FilePath -> Bool -> IO DiskStoreHandles
 initStore path purge = do
   when purge (purgeFile path)
   conn <- open path
+  -- TODO: WAL mode?
   execute_
     conn
     "CREATE TABLE IF NOT EXISTS History ( \

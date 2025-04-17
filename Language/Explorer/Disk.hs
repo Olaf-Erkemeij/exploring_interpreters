@@ -178,6 +178,9 @@ getConfigIO ref stateRef = fmap nodeConfig <$> getNodeIO ref stateRef
 deref :: Storable p c o => Explorer p c o -> Ref -> IO (Maybe c)
 deref (Explorer stateRef) ref = getConfigIO ref stateRef
 
+getNode :: (Storable p c o) => Explorer p c o -> Ref -> IO (Maybe (ExpNode p c o))
+getNode (Explorer stateRef) ref = getNodeIO ref stateRef
+
 config :: (Storable p c o) => Explorer p c o -> IO c
 config (Explorer stateRef) = do
   ExplorerState {..} <- readIORef stateRef
