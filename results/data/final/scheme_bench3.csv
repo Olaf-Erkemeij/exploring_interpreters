@@ -1,0 +1,4 @@
+benchmark    , mean    , stddev
+jump/Default , 2.627 ms, 89.14 μs
+jump/Improved, 2.345 ms, 85.55 μs
+jump/Disk    , 3.946 μs, 146.9 ns
