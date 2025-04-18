@@ -63,6 +63,10 @@ instance (NFData c, NFData p, NFData o) => NFData (ExpNode p c o) where
 
 newtype Explorer p c o = Explorer (IORef (ExplorerState p c o))
 
+-- Needed for benchmarking, not implemented
+instance (NFData c, NFData p, NFData o) => NFData (Explorer p c o) where
+  rnf (Explorer stateRef) = ()
+
 defaultSettings :: ExplorerSettings
 defaultSettings =
   ExplorerSettings
@@ -86,7 +90,7 @@ mkExplorerIO settings path definterp conf = do
   cache <- LRU.newAtomicLRU (Just (cacheSize settings))
   let edgeBlob = Nothing
   let configBlob = Diff.encodeJSON conf
-  let configBlobCompressed = Diff.compress (compressionLevel settings) configBlob
+  let configBlobCompressed = Just $ Diff.compress (compressionLevel settings) configBlob
 
   DiskStore.writeNodeData diskStore initialRef 0 True configBlobCompressed edgeBlob
 
@@ -141,20 +145,23 @@ reconstruct ref state stateRef = do
       let mEdge = mEdgeBlob >>= (Diff.decompress >=> Diff.decodeBinary)
 
       mConfig <-
-        if isKeyframe
-          then return $ Diff.decompress cBlob >>= Diff.decodeJSON
-          else do
-            mParentConfig <- getConfigIO parentRef stateRef
-            case mParentConfig of
-              Nothing -> return Nothing
-              Just cParent -> do
-                let mPatched = do
-                      patchBlob <- Diff.decompress cBlob
-                      patchData <- Diff.decodeJSON patchBlob
-                      case Diff.patchObject cParent patchData of
-                        Error _ -> Nothing
-                        Success cPatched -> Just cPatched
-                return mPatched
+        if isNothing cBlob 
+          then getConfigIO parentRef stateRef
+        else
+          if isKeyframe
+            then return $ Diff.decompress (fromJust cBlob) >>= Diff.decodeJSON
+            else do
+              mParentConfig <- getConfigIO parentRef stateRef
+              case mParentConfig of
+                Nothing -> return Nothing
+                Just cParent -> do
+                  let mPatched = do
+                        patchBlob <- Diff.decompress (fromJust cBlob)
+                        patchData <- Diff.decodeJSON patchBlob
+                        case Diff.patchObject cParent patchData of
+                          Error _ -> Nothing
+                          Success cPatched -> Just cPatched
+                  return mPatched
 
       let buildNode c edge = do
             let node = ExpNode c parentRef edge
@@ -212,9 +219,11 @@ execute p (Explorer stateRef) = do
           let isCheckpoint = (newRef - initialRef) `mod` checkpoint == 0
           let edgeBlob = Just (Diff.compress compression . Diff.encodeBinary $ Just (p, o))
 
-          let configBlob = if isCheckpoint
-              then Diff.compress compression . Diff.encodeJSON $ newconf
-              else Diff.compress compression . Diff.encodeJSON $ Diff.computeDiff conf newconf
+          let diff = Diff.computeDiff conf newconf
+          let configBlob
+                | diff == mempty = Nothing
+                | isCheckpoint = Just $ Diff.compress compression . Diff.encodeJSON $ newconf
+                | otherwise = Just $ Diff.compress compression . Diff.encodeJSON $ diff
 
           DiskStore.writeNodeData diskStore newRef parent isCheckpoint configBlob edgeBlob
 

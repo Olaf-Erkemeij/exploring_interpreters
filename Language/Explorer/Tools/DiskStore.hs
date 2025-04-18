@@ -37,7 +37,7 @@ initStore path purge = do
     \  ref INTEGER PRIMARY KEY,           \
     \  parent INTEGER NOT NULL,           \
     \  checkpoint BOOLEAN NOT NULL,       \
-    \  config BLOB NOT NULL,              \
+    \  config BLOB,                       \
     \  edge BLOB                          \
     \);"
   execute_ conn "CREATE INDEX IF NOT EXISTS idx_parent ON History (parent);"
@@ -53,7 +53,7 @@ writeNodeData ::
   Ref ->
   Ref ->
   Bool ->
-  B.ByteString ->
+  Maybe B.ByteString ->
   Maybe B.ByteString ->
   IO ()
 writeNodeData (DiskStoreHandles conn _) ref parent checkpoint config edge =
@@ -61,9 +61,9 @@ writeNodeData (DiskStoreHandles conn _) ref parent checkpoint config edge =
     conn
     "INSERT INTO History (ref, parent, checkpoint, config, edge) \
     \VALUES (?, ?, ?, ?, ?)"
-    (ref, parent, checkpoint, SQLBlob config, maybe SQLNull SQLBlob edge)
+    (ref, parent, checkpoint, maybe SQLNull SQLBlob config, maybe SQLNull SQLBlob edge)
 
-fetchNodeData :: DiskStoreHandles -> Ref -> IO (Maybe (Ref, Bool, B.ByteString, Maybe B.ByteString))
+fetchNodeData :: DiskStoreHandles -> Ref -> IO (Maybe (Ref, Bool, Maybe B.ByteString, Maybe B.ByteString))
 fetchNodeData (DiskStoreHandles conn _) ref =
   listToMaybe
     <$> query
