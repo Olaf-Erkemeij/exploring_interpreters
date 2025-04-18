@@ -61,6 +61,10 @@ data Explorer programs m configs output where
     } ->
     Explorer programs m configs output
 
+-- Needed for benchmarking, not implemented
+instance (NFData programs, NFData configs, NFData output) => NFData (Explorer programs m configs output) where
+  rnf (Explorer _ _ _ h) = rnf h
+
 mkExplorer :: Language p m c o => Bool -> (c -> c -> Bool) -> (p -> c -> m (Maybe c, o)) -> c -> Explorer p m c o
 mkExplorer shadow shadowEq definterp conf =
   Explorer
