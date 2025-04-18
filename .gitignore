@@ -1,3 +1,6 @@
 dist
 dist-newstyle
 *.db
+*.db-journal
+*.db-shm
+*.db-wal
