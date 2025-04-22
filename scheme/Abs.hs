@@ -4,7 +4,7 @@ module Abs where
 import Test.QuickCheck
 import Control.DeepSeq (NFData)
 import GHC.Generics (Generic)
-import Data.Aeson (ToJSON, FromJSON)
+import Data.Aeson (ToJSON, FromJSON, toEncoding, genericToEncoding, defaultOptions)
 import Data.Binary (Binary)
 
 data Expr
@@ -17,7 +17,8 @@ data Expr
   deriving (Show, Eq, Generic)
 
 instance NFData Expr
-instance ToJSON Expr
+instance ToJSON Expr where
+  toEncoding = genericToEncoding defaultOptions
 instance FromJSON Expr
 instance Binary Expr
 

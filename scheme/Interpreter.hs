@@ -8,7 +8,7 @@ import Data.List ( (\\) )
 import Control.DeepSeq (NFData)
 import GHC.Generics (Generic)
 
-import Data.Aeson (ToJSON, FromJSON)
+import Data.Aeson (ToJSON, FromJSON, toEncoding, genericToEncoding, defaultOptions)
 import Data.Binary (Binary)
 
 data LeafVal = IntLeaf Int | BoolLeaf Bool | StringLeaf String
@@ -21,7 +21,8 @@ data Func = Head [String] Func
   deriving (Eq, Show, Generic)
 
 instance NFData Func
-instance ToJSON Func
+instance ToJSON Func where
+  toEncoding = genericToEncoding defaultOptions
 instance FromJSON Func
 instance Binary Func
 
@@ -111,7 +112,8 @@ data Value
   deriving (Eq, Generic)
 
 instance NFData Value
-instance ToJSON Value
+instance ToJSON Value where
+  toEncoding = genericToEncoding defaultOptions
 instance FromJSON Value
 instance Binary Value
 
@@ -147,7 +149,8 @@ data Context = Context
   deriving (Eq, Show, Generic)
 
 instance NFData Context
-instance ToJSON Context
+instance ToJSON Context where
+  toEncoding = genericToEncoding defaultOptions
 instance FromJSON Context
 instance Binary Context
 
