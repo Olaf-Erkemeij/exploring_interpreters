@@ -1,13 +1,13 @@
 class Sup {
-  public int method() {
+  public int Method() {
     return 1;
   }
 }
 
 class Sub {
-  public int method() {
+  public int Method() {
     return 42;
   }
 }
 
-new Sub().method();
+new Sub().Method();

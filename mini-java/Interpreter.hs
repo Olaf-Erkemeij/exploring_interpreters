@@ -170,9 +170,13 @@ genObject (ClassDecl id parent vars methods) = do
     (Just c) -> do
       ctx <- get
       case M.lookup c (env ctx) of
-        Just (ClassInstance pcd _ _) -> do 
-          pgened <- genObject pcd
-          return $ Just pgened
+        (Just (Ref r)) -> do
+          pclass <- deref r
+          case pclass of 
+            (ClassInstance pcd _ _) -> do
+              pgened <- genObject pcd
+              return $ Just pgened
+            _ -> error "Parent wrong representation."
         _ -> error "Parent not found"
     Nothing -> return Nothing
   let obj = case pobj of
