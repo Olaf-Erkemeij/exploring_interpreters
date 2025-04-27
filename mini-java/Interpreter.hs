@@ -26,9 +26,9 @@ data Val
   = BoolLit Bool
   | IntLit Int
   | Vec [Int]
-  | Closure (Val -> JavaState Val)
+  | MethodClosure MethodDecl Env
   | ObjInstance Ref String Env [Val]
-  | ClassInstance (JavaState Val) Env [String]
+  | ClassInstance ClassDecl Env [String]
   | Null
   | Ref Ref
   | ListLit [Val]
@@ -39,9 +39,9 @@ instance Show Val where
   show (Vec ints) = show ints
   show (ObjInstance r s env vals) = "Object[id=" ++ show r ++ ", class=" ++ show s ++ ", env=" ++ show env ++ ", parents=" ++ show vals ++ "]"
   show (ClassInstance _ envs parents) = "Class " ++ show envs ++ ", parents: " ++ show parents
+  show (MethodClosure md env) = "Method clousre: " ++ show md ++ " in: " ++ show env
   show Null = "null"
   show (Ref r) = "Ref " ++ show r
-  show (Closure c) = "Closure"
   show (ListLit l) = show l
 
 data Context = Context
@@ -64,7 +64,6 @@ instance NFData Val where
   rnf (ClassInstance _ envs parents) = rnf envs `seq` rnf parents
   rnf Null = ()
   rnf (Ref r) = rnf r
-  rnf (Closure _) = ()
   rnf (ListLit l) = rnf l
 
 instance NFData Context where
@@ -127,24 +126,26 @@ retrieveFields (ObjInstance ref c vals parent : xs) = do
 retrieveFields _ = return M.empty
 
 declareMethod :: MethodDecl -> JavaState Env
-declareMethod (MethodDecl _ ident fl vars statements ret) = return $ M.insert ident (Closure runMethod) M.empty
-  where
-    runMethod :: Val -> JavaState Val
-    runMethod (ListLit (ObjInstance ref c vals parents : args)) = do
-      ctx_env <- gets env
-      let local_env = M.insert "this" (Ref ref) ctx_env
-      arg_env <- matchFormals fl (ListLit args)
-      var_env <- declareVariables vars
-      par_env <- retrieveFields parents
-      let run_env = foldr M.union var_env [arg_env, vals, par_env, local_env]
-      ctx <- get
-      put $ ctx {env = run_env}
-      execL statements
-      res <- eval ret
-      ctx' <- get
-      put $ ctx' {env = ctx_env}
-      return res
-    runMethod _ = error "Method arguments are incorrect."
+declareMethod md@(MethodDecl _ ident fl vars statements ret) = do 
+  cenv <- gets env 
+  return $ M.insert ident (MethodClosure md cenv) M.empty
+
+runMethod :: Val -> Val -> JavaState Val
+runMethod (ListLit (ObjInstance ref c vals parents : args)) (MethodClosure (MethodDecl _ _ fl vars statements ret) cenv) = do
+  let local_env = M.insert "this" (Ref ref) cenv
+  arg_env <- matchFormals fl (ListLit args)
+  var_env <- declareVariables vars
+  par_env <- retrieveFields parents
+  let run_env = foldr M.union var_env [arg_env, vals, par_env, local_env]
+  ctx <- get
+  ctx_env <- gets env
+  put $ ctx {env = run_env}
+  execL statements
+  res <- eval ret
+  ctx' <- get
+  put $ ctx' {env = ctx_env}
+  return res
+runMethod _ _ = error "Method arguments are incorrect."
 
 declareMethods :: [MethodDecl] -> JavaState Env
 declareMethods [] = return M.empty
@@ -158,31 +159,37 @@ parentToList (Just s) = [s]
 parentToList Nothing = []
 
 declareClassVal :: ClassDecl -> JavaState Val
-declareClassVal (ClassDecl id parent vars methods) =
-  declareMethods methods >>= \methods_env -> return $ ClassInstance genObject methods_env (parentToList parent)
-  where
-    genObject :: JavaState Val
-    genObject = do
-      r <- newAtom
-      field_map <- declareVariables vars
-      pobj <- case parent of
-        (Just c) -> do
-          ctx <- get
-          case M.lookup c (env ctx) of
-            Just (ClassInstance clos _ _) -> clos <&> Just
-            _ -> error "Parent not found"
-        Nothing -> return Nothing
-      let obj = case pobj of
-            Just obj -> ObjInstance r id field_map [obj]
-            Nothing -> ObjInstance r id field_map []
-      modify (\ctx -> ctx {store = M.insert r obj (store ctx)})
-      return obj
+declareClassVal cd@(ClassDecl id parent vars methods) = do 
+  declareMethods methods >>= \methods_env -> return $ ClassInstance cd methods_env (parentToList parent)
+
+genObject :: ClassDecl -> JavaState Val
+genObject (ClassDecl id parent vars methods) = do
+  r <- newAtom
+  field_map <- declareVariables vars
+  pobj <- case parent of
+    (Just c) -> do
+      ctx <- get
+      case M.lookup c (env ctx) of
+        Just (ClassInstance pcd _ _) -> do 
+          pgened <- genObject pcd
+          return $ Just pgened
+        _ -> error "Parent not found"
+    Nothing -> return Nothing
+  let obj = case pobj of
+        Just uobj -> ObjInstance r id field_map [uobj]
+        Nothing -> ObjInstance r id field_map []
+  modify (\ctx -> ctx {store = M.insert r obj (store ctx)})
+  return obj
 
 classId :: ClassDecl -> String
 classId (ClassDecl id _ _ _) = id
 
 declareClass :: ClassDecl -> JavaState ()
-declareClass cls = declareClassVal cls >>= \inst -> modify (\c -> c {env = M.insert (classId cls) inst (env c)})
+declareClass cls = declareClassVal cls >>= \inst -> modify (doUpdate inst)
+  where 
+    doUpdate inst ctx = 
+      case M.lookup (classId cls) (env ctx) of 
+        (Just (Ref r)) -> ctx { store = M.insert r inst (store ctx) }
 
 declareClasses :: [ClassDecl] -> JavaState ()
 declareClasses = foldr ((>>) . declareClass) (return ())
@@ -191,8 +198,11 @@ computeClassMembers :: String -> JavaState Env
 computeClassMembers cls_name = do
   ctx <- get
   case M.lookup cls_name (env ctx) of
-    (Just (ClassInstance _ field_map [])) -> return field_map
-    (Just (ClassInstance _ field_map (cls : _))) -> computeClassMembers cls >>= \penv -> return $ M.union field_map penv
+    (Just (Ref r)) -> do 
+      res <- deref r
+      case res of 
+        ((ClassInstance _ field_map [])) -> return field_map
+        ((ClassInstance _ field_map (cls : _))) -> computeClassMembers cls >>= \penv -> return $ M.union field_map penv
     m -> error $ "Class not found.: " ++ cls_name ++ " -> " ++ show ctx
 
 listLitAppend :: Val -> Val -> Val
@@ -208,7 +218,7 @@ lastRef r =
   gets store >>= \sto -> case M.lookup r sto of
     Just (Ref r') -> lastRef r'
     Just _ -> return r
-    Nothing -> error "Derefernece goes to nothing"
+    Nothing -> error "Dereference goes to nothing"
 
 deref :: Int -> JavaState Val
 deref r = gets store >>= \sto -> lastRef r >>= \r' -> return $ fromJust $ M.lookup r' sto
@@ -249,8 +259,8 @@ eval (Sub ls rs) =
       _ -> undefined
 eval (NewObj ident) =
   gets env >>= \e -> case M.lookup ident e of
-    (Just (ClassInstance clos envs parents)) -> clos
-    v -> gets env >>= \ctx -> error $ "Newobj not a class instance: " ++ ident ++ "\n"
+    (Just (Ref r)) -> deref r >>= \((ClassInstance cd envs parents)) -> genObject cd
+    v -> gets env >>= \ctx -> error $ "Newobj not a class instance: " ++ ident ++ " " ++ show ctx ++ "\n"
 eval This =
   gets env >>= \env' -> case M.lookup "this" env' of
     (Just (Ref r)) -> gets store <&> (fromJust . M.lookup r)
@@ -260,8 +270,8 @@ eval (MethodCall target name args) =
     (ObjInstance id cls objenv parent) ->
       computeClassMembers cls >>= \menv ->
         case M.lookup name menv of
-          Just (Closure f) -> evalActuals args >>= \actuals -> f (listLitAppend (ListLit [ObjInstance id cls objenv parent]) actuals)
-          _ -> get >>= \ctx -> error $ "Not a closure.: " ++ name ++ " Env: " ++ show menv ++ show cls ++ show parent
+          Just md -> evalActuals args >>= \actuals -> runMethod (listLitAppend (ListLit [ObjInstance id cls objenv parent]) actuals) md
+          _ -> get >>= \ctx -> error $ "Calling method on something that is not a method: " ++ name ++ " Env: " ++ show menv ++ show cls ++ show parent
     w -> error $ "Not an object: " ++ show w
 eval (ArrAccess target loc) =
   eval target >>= \target' ->
@@ -325,10 +335,22 @@ updateVec :: Val -> Val -> Val -> Val
 updateVec (Vec l) (IntLit loc) (IntLit newval) = Vec (updateListAtIndex loc newval l)
 updateVec _ _ _ = error "Invalid vector update"
 
+
+boundNames :: [ClassDecl] -> [String] 
+boundNames = map classId
+
+forwardLink :: [String] -> JavaState ()
+forwardLink [] = return ()
+forwardLink (n:ns) = do 
+  r <- newAtom
+  modify $ \ctx -> ctx { env = M.insert n (Ref r) (env ctx), store = M.insert r Null (store ctx) }
+  forwardLink ns
+
 runMain (MainClass _ _ s) = exec s
 
 runProgram (Program m cc) = execState runProgram' initialContext
   where
-    runProgram' = declareClasses cc >> runMain m
+    runProgram' = forwardLink names >> declareClasses cc >> runMain m
+    names = boundNames cc
 
 initialContext = Context {env = M.empty, store = M.empty, out = [], given = Null, failed = False, res = Null, seed = 1}

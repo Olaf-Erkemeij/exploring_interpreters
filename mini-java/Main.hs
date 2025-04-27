@@ -324,7 +324,7 @@ fromFile file = do
   case parse parsePhrase (lexer lexerSettings contents) of
     [] -> return ()
     (x : _) -> do
-      (Just ctx, out) <- Pi.runPhrase x initialContext
+      (Just ctx, out) <- Pi.runPhrase x initialContext 
       print $ env ctx
       print $ store ctx
       putStrLn (concat out)
