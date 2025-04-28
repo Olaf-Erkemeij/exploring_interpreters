@@ -1,9 +1,9 @@
 class Super {
-  public int sup() { return 6; }
+  public int Sup() { return 6; }
 }
 
-class Sub extends Super{
-  public int sub() { return this.sup() * 7; }
+class Sub extends Super {
+  public int Sub() { return this.Sup() * 7; }
 }
 
-new Sub().sub();
+new Sub().Sub();
