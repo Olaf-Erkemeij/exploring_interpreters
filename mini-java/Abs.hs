@@ -4,6 +4,8 @@ module Abs where
 
 import Control.DeepSeq (NFData, rnf)
 import GHC.Generics (Generic)
+import Data.Aeson (ToJSON, FromJSON)
+import Data.Binary (Binary)
 
 data Expr
   = Integer Int
@@ -68,21 +70,51 @@ data Program = Program MainClass [ClassDecl]
   deriving (Show, Eq, Generic)
 
 instance NFData Expr
+instance ToJSON Expr
+instance FromJSON Expr
+instance Binary Expr
 
 instance NFData Statement
+instance ToJSON Statement
+instance FromJSON Statement
+instance Binary Statement
 
 instance NFData Phrase
+instance ToJSON Phrase
+instance FromJSON Phrase
+instance Binary Phrase
 
 instance NFData Type
+instance ToJSON Type
+instance FromJSON Type
+instance Binary Type
 
 instance NFData FormalListElem
+instance ToJSON FormalListElem
+instance FromJSON FormalListElem
+instance Binary FormalListElem
 
 instance NFData VarDecl
+instance ToJSON VarDecl
+instance FromJSON VarDecl
+instance Binary VarDecl
 
 instance NFData MethodDecl
+instance ToJSON MethodDecl
+instance FromJSON MethodDecl
+instance Binary MethodDecl
 
 instance NFData ClassDecl
-
+instance ToJSON ClassDecl
+instance FromJSON ClassDecl
+instance Binary ClassDecl
+ 
 instance NFData MainClass
+instance ToJSON MainClass
+instance FromJSON MainClass
+instance Binary MainClass
 
 instance NFData Program
+instance ToJSON Program
+instance FromJSON Program
+instance Binary Program

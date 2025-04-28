@@ -1,5 +1,6 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module Interpreter where
 
@@ -13,6 +14,10 @@ import Data.Maybe
 import Data.Hashable
 import GHC.IO.Handle.Text (commitBuffer')
 import GHC.RTS.Flags (CCFlags (msecsPerTick))
+import GHC.Generics (Generic)
+import Data.Aeson (ToJSON)
+import Data.Aeson.Types (FromJSON)
+import Data.Binary (Binary)
 
 -- import GHC.DataSize
 
@@ -32,6 +37,11 @@ data Val
   | Null
   | Ref Ref
   | ListLit [Val]
+  deriving (Generic, Eq)
+
+instance ToJSON Val
+instance FromJSON Val
+instance Binary Val
 
 instance Show Val where
   show (BoolLit b) = show b
@@ -39,8 +49,8 @@ instance Show Val where
   show (Vec ints) = show ints
   show (ObjInstance r s env vals) = "Object[id=" ++ show r ++ ", class=" ++ show s ++ ", env=" ++ show env ++ ", parents=" ++ show vals ++ "]"
   show (ClassInstance _ envs parents) = "Class " ++ show envs ++ ", parents: " ++ show parents
-  show (MethodClosure md env) = "Method clousre: " ++ show md ++ " in: " ++ show env
-  show Null = "null"
+  show (MethodClosure md env) = "Method closure: " ++ show md ++ " in: " ++ show env
+  show Null = "Null"
   show (Ref r) = "Ref " ++ show r
   show (ListLit l) = show l
 
@@ -53,7 +63,7 @@ data Context = Context
     res :: Val,
     seed :: Ref
   }
-  deriving (Show)
+  deriving (Show, Generic, Eq)
 
 instance NFData Val where
   rnf :: Val -> ()
@@ -62,12 +72,17 @@ instance NFData Val where
   rnf (Vec ints) = rnf ints
   rnf (ObjInstance r s env vals) = rnf r `seq` rnf s `seq` rnf env `seq` rnf vals
   rnf (ClassInstance _ envs parents) = rnf envs `seq` rnf parents
+  rnf (MethodClosure md env) = rnf md `seq` rnf env
   rnf Null = ()
   rnf (Ref r) = rnf r
   rnf (ListLit l) = rnf l
 
 instance NFData Context where
   rnf (Context e s o g f r se) = rnf e `seq` rnf s `seq` rnf o `seq` rnf g `seq` rnf f `seq` rnf r `seq` rnf se
+
+instance ToJSON Context
+instance FromJSON Context
+instance Binary Context
 
 type JavaState = State Context
 
