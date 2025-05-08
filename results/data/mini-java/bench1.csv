@@ -1,0 +1,5 @@
+benchmark,mean,stddev
+Plain,5.759 ms,378.2 μs
+Default,14.59 ms,424.2 μs
+Improved,14.55 ms,548.4 μs
+Disk,9.813 s,971.8 ms
