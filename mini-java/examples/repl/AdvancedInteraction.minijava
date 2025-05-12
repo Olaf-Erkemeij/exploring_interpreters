@@ -10,24 +10,24 @@ System.out.println(x);
 class A {
   int f;
   
-  public int set_f(int a) {
+  public int Set_f(int a) {
     int old_f;
     old_f = f;
     f = a;
     return old_f;
   }
   
-  public int method() {
+  public int Method() {
     return f + y;
   }
 }
 
 A a;
 a = new A();
-a.set_f(5); //prints 0
+a.Set_f(5); //prints 0
 
-a.method();
+a.Method();
 
 y = y + 100;
 
-a.method();
+a.Method();

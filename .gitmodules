@@ -1,0 +1,3 @@
+[submodule "aeson-diff"]
+	path = aeson-diff
+	url = https://github.com/Olaf-Erkemeij/aeson-diff
