@@ -56,7 +56,6 @@ data Explorer programs m configs output where
         { defInterp :: programs -> configs -> m (Maybe configs, output)
         , treePos :: !(Z.TreePos Z.Full (NodeData programs configs output))
         , genRef :: !Ref
-        , configEq :: configs -> configs -> Bool
         } -> Explorer programs m configs output
 
 mkExplorer :: Language p m c o => Bool -> (c -> c -> Bool) -> (p -> c -> m (Maybe c, o)) -> c -> Explorer p m c o
@@ -64,7 +63,6 @@ mkExplorer shadow shadowEq definterp conf = Explorer
     { defInterp = definterp
     , treePos = Z.fromTree $ Node (NodeData initialRef conf Nothing) []
     , genRef = initialRef + 1
-    , configEq = shadowEq
 }
 
 initialRef :: Int
@@ -83,9 +81,7 @@ deref :: Explorer p m c o -> Ref -> Maybe c
 deref e r = fmap (nodeConfig . Z.label) (findNode r (Z.root (treePos e)))
 
 findExisting :: Explorer p m c o -> c -> Tree (NodeData p c o) -> Maybe Ref
-findExisting e conf (Node nd cs)
-    | configEq e (nodeConfig nd) conf = Just (nodeRef nd)
-    | otherwise = msum $ map (findExisting e conf) cs
+findExisting e conf (Node nd cs) = msum $ map (findExisting e conf) cs
 
 moveToRef :: Ref -> Z.TreePos Z.Full (NodeData p c o) -> Z.TreePos Z.Full (NodeData p c o)
 moveToRef target pos = fromMaybe pos (findNode target pos)
