@@ -89,7 +89,6 @@ moveToRef target pos = fromMaybe pos (findNode target pos)
 appendChild :: a -> Z.TreePos Z.Full a -> Z.TreePos Z.Full a
 appendChild child pos =
   let updatedPos = Z.modifyTree (\(Node lab cs) -> Node lab (cs ++ [Node child []])) pos
-      -- Convert the updated zipper to a plain tree.
       tree = Z.toTree updatedPos
   in case tree of
        Node _ cs ->
