@@ -1,18 +1,18 @@
 {-# LANGUAGE DeriveGeneric #-}
+
 module Interpreter where
 
-import Abs ( Expr(..) )
-import qualified Data.Map as M
-import Control.Monad.State
-import Data.List ( (\\) )
+import Abs (Expr (..))
 import Control.DeepSeq (NFData)
+import Control.Monad.State
+import Data.Aeson (FromJSON, ToJSON, defaultOptions, genericToEncoding, toEncoding)
+import Data.Binary (Binary)
+import Data.List ((\\))
+import qualified Data.Map as M
 import GHC.Generics (Generic)
 
-import Data.Aeson (ToJSON, FromJSON, toEncoding, genericToEncoding, defaultOptions)
-import Data.Binary (Binary)
-
-data LeafVal = IntLeaf Int | BoolLeaf Bool | StringLeaf String
-data Func = Head [String] Func
+data Func
+  = Head [String] Func
   | Leaf String
   | Monop String Func
   | Binop String Func Func
@@ -21,9 +21,12 @@ data Func = Head [String] Func
   deriving (Eq, Show, Generic)
 
 instance NFData Func
+
 instance ToJSON Func where
   toEncoding = genericToEncoding defaultOptions
+
 instance FromJSON Func
+
 instance Binary Func
 
 plus :: Func
@@ -51,10 +54,10 @@ modifyEnv :: Env -> [(String, Value)] -> EvalM Value -> EvalM Value
 modifyEnv baseEnv bindings comp = do
   oldCtx <- get
   let newEnv = M.union (M.fromList bindings) baseEnv
-  put oldCtx { env = newEnv }
+  put oldCtx {env = newEnv}
   result <- comp
   newOut <- gets out
-  put oldCtx { out = newOut }
+  put oldCtx {out = newOut}
   return result
 
 evaluate :: Func -> [Value] -> EvalM Value
@@ -73,7 +76,7 @@ evaluate' (Leaf s) = do
   curEnv <- gets env
   case M.lookup s curEnv of
     Just val -> return val
-    Nothing  -> error ("Undefined symbol: " ++ s)
+    Nothing -> error ("Undefined symbol: " ++ s)
 evaluate' (Binop op a b) = do
   a' <- evaluate' a
   b' <- evaluate' b
@@ -88,7 +91,7 @@ evaluate' (Monop op a) = do
   a' <- evaluate' a
   case op of
     "display" -> do
-      modify $ \ctx -> ctx { out = out ctx ++ [show a' ++ "\n"] }
+      modify $ \ctx -> ctx {out = out ctx ++ [show a' ++ "\n"]}
       return Void
     "not" -> BoolVal . not <$> fromBool a'
     _ -> error "Invalid operator"
@@ -112,9 +115,12 @@ data Value
   deriving (Eq, Generic)
 
 instance NFData Value
+
 instance ToJSON Value where
   toEncoding = genericToEncoding defaultOptions
+
 instance FromJSON Value
+
 instance Binary Value
 
 instance Show Value where
@@ -140,18 +146,22 @@ prettyPrintExpr (Lambda args body) = "(lambda (" ++ unwords args ++ ") " ++ pret
 prettyPrintExpr (List xs) = "(" ++ unwords (map prettyPrintExpr xs) ++ ")"
 
 type Env = M.Map String Value
+
 type EvalM = State Context
 
 data Context = Context
-  { env :: Env
-  , out :: [String]
+  { env :: Env,
+    out :: [String]
   }
   deriving (Eq, Show, Generic)
 
 instance NFData Context
+
 instance ToJSON Context where
   toEncoding = genericToEncoding defaultOptions
+
 instance FromJSON Context
+
 instance Binary Context
 
 fromInt :: Value -> EvalM Int
@@ -170,21 +180,23 @@ boolFunc op [IntVal x, IntVal y] = return (BoolVal (op x y))
 boolFunc _ _ = error "Invalid arguments to function"
 
 builtins :: Env
-builtins = M.fromList
-    [ ("+", FunVal plus)
-    , ("*", FunVal times)
-    , ("-", FunVal minus)
-    , ("/", FunVal divide)
-    , ("<", FunVal lessThan)
-    , ("if", FunVal ifFunc)
-    , ("display", FunVal display)
+builtins =
+  M.fromList
+    [ ("+", FunVal plus),
+      ("*", FunVal times),
+      ("-", FunVal minus),
+      ("/", FunVal divide),
+      ("<", FunVal lessThan),
+      ("if", FunVal ifFunc),
+      ("display", FunVal display)
     ]
 
 initialContext :: Context
-initialContext = Context
-  { env = builtins
-  , out = []
-  }
+initialContext =
+  Context
+    { env = builtins,
+      out = []
+    }
 
 eval :: Expr -> EvalM Value
 eval (Integer i) = return (IntVal i)
@@ -194,10 +206,10 @@ eval (Symbol s) = do
   curEnv <- gets env
   case M.lookup s curEnv of
     Just val -> return val
-    Nothing  -> error ("Undefined symbol: " ++ s)
+    Nothing -> error ("Undefined symbol: " ++ s)
 eval (List [Symbol "define", Symbol var, expr]) = do
   val <- eval expr
-  modify $ \ctx -> ctx { env = M.insert var val (env ctx) }
+  modify $ \ctx -> ctx {env = M.insert var val (env ctx)}
   return val
 eval (Lambda args body) = return (FunVal (ExprFunc args body))
 eval (List (func : args)) = do
