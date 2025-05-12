@@ -14,8 +14,7 @@ import Data.List (intercalate)
 import Data.Maybe (listToMaybe)
 import qualified Data.Text as T
 import Database.SQLite.Simple
-import Database.SQLite.Simple.Types
-import System.Directory
+import System.Directory (doesFileExist, removeFile)
 
 type Ref = Int
 
