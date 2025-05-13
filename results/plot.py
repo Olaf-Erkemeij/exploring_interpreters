@@ -163,7 +163,7 @@ def plot_final_test2(pgf=False):
     plots = [
         ["all", [1, 2, 3, 4, 5, 6, 7]],
         ["all-6", [1, 2, 3, 4, 5, 7]],
-        ["final", [1, 5, 7]],
+        ["final", [1, 4, 5, 7]],
     ]
 
     ext = "pgf" if pgf else "png"
