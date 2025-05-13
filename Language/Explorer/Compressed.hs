@@ -44,25 +44,12 @@ import Data.Bifunctor ( Bifunctor(second) )
 
 import GHC.Generics (Generic)
 import Control.DeepSeq (NFData, rnf)
-import Data.Aeson (ToJSON, FromJSON, toJSON, fromJSON, Result(..), Value)
-import Data.Aeson.Diff (diff, patch, Patch)
 import Data.Binary ( Binary, decode, encode )
 import Codec.Compression.Zlib (compress, decompress)
-import qualified Data.Aeson.Types as AesonTypes
-import qualified Language.Explorer.Tools.Diff as DiffTool
 import Data.ByteString.Lazy (ByteString)
 
 type Ref = Int
 type Language p m c o = (Eq p, Eq o, Monad m, Monoid o, Binary c)
-
-data ConfigDiff c = FullConfig !c
-                  | PatchedConfig { baseRef :: !Ref
-                                  , patchData :: !Patch
-                                  , distance :: !Int
-                                  }
-                  deriving (Show, Eq, Generic)
-
-instance NFData c => NFData (ConfigDiff c)
 
 data Explorer programs m configs output where
     Explorer :: Language programs m configs output =>
