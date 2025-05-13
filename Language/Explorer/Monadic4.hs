@@ -72,7 +72,7 @@ data Explorer programs m configs output where
       config :: !configs,
       currRef :: !Ref,
       genRef :: !Ref,
-      cmap :: IntMap.IntMap (ConfigDiff configs),
+      cmap :: !(IntMap.IntMap (ConfigDiff configs)),
       execEnv :: !(Gr Ref (programs, output)),
       maxPathLength :: !Int,
       maxDegree :: !Int
