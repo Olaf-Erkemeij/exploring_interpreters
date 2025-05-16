@@ -65,6 +65,11 @@ data ConfigDiff c
 
 instance NFData c => NFData (ConfigDiff c)
 
+-- Added for benchmarking.
+instance (NFData programs, NFData configs, NFData output) => NFData (Explorer programs m configs output) where
+  rnf (Explorer defInterp config currRef genRef cmap execEnv maxPathLength maxDegree) =
+    rnf defInterp `seq` rnf config `seq` rnf currRef `seq` rnf genRef `seq` rnf cmap `seq` rnf execEnv `seq` rnf maxPathLength `seq` rnf maxDegree
+
 data Explorer programs m configs output where
   Explorer ::
     Language programs m configs output =>

@@ -287,24 +287,35 @@ benchmarkExecute4 n = do
     EM7.execute expr explr
   return explr
 
+benchmarkExecute5 :: Int -> IO (EM4.Explorer Expr IO Context [String])
+benchmarkExecute5 n = foldM step (EM4.mkExplorerNoSharing runExpr initialContext) [1 .. n]
+  where
+    step explr _ = fst <$> (generate genExprValid >>= flip EM4.execute explr)
+
 -- Second benchmark: Time to execute one expression on a tree of size N
-benchmarkExecute5 :: EM1.Explorer Expr IO Context [String] -> IO (EM1.Explorer Expr IO Context [String])
-benchmarkExecute5 explr = do
+benchmarkExecute6 :: EM1.Explorer Expr IO Context [String] -> IO (EM1.Explorer Expr IO Context [String])
+benchmarkExecute6 explr = do
   expr <- generate genExprValid
   (newExplr, _) <- EM1.execute expr explr
   return newExplr
 
-benchmarkExecute6 :: EM5.Explorer Expr IO Context [String] -> IO (EM5.Explorer Expr IO Context [String])
-benchmarkExecute6 explr = do
+benchmarkExecute7 :: EM5.Explorer Expr IO Context [String] -> IO (EM5.Explorer Expr IO Context [String])
+benchmarkExecute7 explr = do
   expr <- generate genExprValid
   (newExplr, _) <- EM5.execute expr explr
   return newExplr
 
-benchmarkExecute7 :: EM7.Explorer Expr Context [String] -> IO (EM7.Explorer Expr Context [String])
-benchmarkExecute7 explr = do
+benchmarkExecute8 :: EM7.Explorer Expr Context [String] -> IO (EM7.Explorer Expr Context [String])
+benchmarkExecute8 explr = do
   expr <- generate genExprValid
   _ <- EM7.execute expr explr
   return explr
+
+benchmarkExecute9 :: EM4.Explorer Expr IO Context [String] -> IO (EM4.Explorer Expr IO Context [String])
+benchmarkExecute9 explr = do
+  expr <- generate genExprValid
+  (newExplr, _) <- EM4.execute expr explr
+  return newExplr
 
 -- Third benchmark: Time to perform a jump on a tree of size N
 benchmarkJump1 :: EM1.Explorer Expr IO Context [String] -> IO (EM1.Explorer Expr IO Context [String])
@@ -328,28 +339,38 @@ benchmarkJump3 explr = do
   _ <- EM7.jump jumpRef explr
   EM7.getCurrRef explr
 
+benchmarkJump4 :: EM4.Explorer Expr IO Context [String] -> IO (EM4.Explorer Expr IO Context [String])
+benchmarkJump4 explr = do
+  jumpRef <- generate (choose (1, EM4.currRef explr - 1))
+  case EM4.jump jumpRef explr of
+    Just newExplr -> return newExplr
+    Nothing -> return explr
+
 main :: IO ()
 main =
   defaultMainWith
     (defaultConfig {timeLimit = 30})
     [ bgroup
         "chain execute"
-        [ bench "Plain" $ nfIO (benchmarkExecute1 n),
-          bench "Default" $ nfIO (benchmarkExecute2 n),
-          bench "Improved" $ nfIO (benchmarkExecute3 n),
-          bench "Disk" $ whnfIO (benchmarkExecute4 n)
+        [ bench "Plain"    $ nfIO   (benchmarkExecute1 n),
+          bench "Default"  $ nfIO   (benchmarkExecute2 n),
+          bench "Improved" $ nfIO   (benchmarkExecute3 n),
+          bench "Disk"     $ whnfIO (benchmarkExecute4 n),
+          bench "Patch"    $ nfIO   (benchmarkExecute5 n)
         ],
       bgroup
         "single execute"
-        [ env (randomTree n p) $ \explr -> bench "Default" $ nfIO (benchmarkExecute5 explr),
-          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO (benchmarkExecute6 explr),
-          env (randomTreeDisk n p) $ \explr -> bench "Disk" $ whnfIO (benchmarkExecute7 explr)
+        [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkExecute6 explr),
+          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkExecute7 explr),
+          env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkExecute8 explr),
+          env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkExecute9 explr)
         ],
       bgroup
         "jump"
-        [ env (randomTree n p) $ \explr -> bench "Default" $ nfIO (benchmarkJump1 explr),
-          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO (benchmarkJump2 explr),
-          env (randomTreeDisk n p) $ \explr -> bench "Disk" $ whnfIO (benchmarkJump3 explr)
+        [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkJump1 explr),
+          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkJump2 explr),
+          env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkJump3 explr),
+          env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkJump4 explr)
         ]
     ]
   where
@@ -386,6 +407,23 @@ randomTreeFive n p = do
           Nothing -> return explr
       else return explr
   (newExplr, _) <- EM5.execute randExpr explr'
+  return newExplr
+
+randomTreeFour :: Int -> Float -> IO (EM4.Explorer Expr IO Context [String])
+randomTreeFour 1 _ = EM4.mkExplorerNoSharing runExpr <$> initialContext'
+randomTreeFour n p = do
+  explr <- randomTreeFour (n - 1) p
+  randExpr <- generate genExprValid
+  jumpCond <- generate $ choose (0.0, 1.0)
+  explr' <-
+    if jumpCond <= p
+      then do
+        jumpRef <- generate (choose (1, EM4.currRef explr - 1))
+        case EM4.jump jumpRef explr of
+          Just newExplr -> return newExplr
+          Nothing -> return explr
+      else return explr
+  (newExplr, _) <- EM4.execute randExpr explr'
   return newExplr
 
 randomTrees ::
