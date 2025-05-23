@@ -7,7 +7,7 @@ import Abs
 import Control.DeepSeq
 import Control.Monad
 import Criterion.Main as CM
-import Criterion.Types (Config (timeLimit))
+import Criterion.Types (Config (timeLimit), Verbosity (Verbose), resamples, verbosity)
 import Data.Functor
 import qualified Data.Map as M
 import Data.Tree (drawTree)
@@ -263,7 +263,7 @@ main :: IO ()
 -- main = runFinalExperiments
 main =
   defaultMainWith
-    (defaultConfig {timeLimit = 30})
+    (defaultConfig {timeLimit = 60, resamples = 1000, verbosity = Verbose})
     [ bgroup
         "chain execute"
         [ bench "Plain"    $ nfIO   (benchmarkExecute1 n),

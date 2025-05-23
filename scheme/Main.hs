@@ -11,7 +11,7 @@ import Criterion.Main
     nfIO,
     whnfIO,
   )
-import Criterion.Types (Config (timeLimit))
+import Criterion.Types (Config (timeLimit), Verbosity (Verbose), resamples, verbosity)
 import Data.Char (isAlpha, isDigit)
 import Data.Tree (drawTree)
 import GHC.DataSize (recursiveSizeNF)
@@ -349,7 +349,7 @@ benchmarkJump4 explr = do
 main :: IO ()
 main =
   defaultMainWith
-    (defaultConfig {timeLimit = 30})
+    (defaultConfig {timeLimit = 60, resamples = 1000, verbosity = Verbose})
     [ bgroup
         "chain execute"
         [ bench "Plain"    $ nfIO   (benchmarkExecute1 n),
