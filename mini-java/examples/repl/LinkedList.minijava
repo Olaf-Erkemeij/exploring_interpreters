@@ -1,26 +1,26 @@
 class Element {
-    int Age ;          
-    int Salary ;
-    boolean Married ;
+    int age ;          
+    int salary ;
+    boolean married ;
 
     // Initialize some class variables
     public boolean Init(int v_Age, int v_Salary, boolean v_Married){
-	Age = v_Age ;
-	Salary = v_Salary ;
-	Married = v_Married ;
+	age = v_Age ;
+	salary = v_Salary ;
+	married = v_Married ;
 	return true ;
     }
 
     public int GetAge(){
-	return Age ;
+	return age ;
     }
     
     public int GetSalary(){
-	return Salary ;
+	return salary ;
     }
 
     public boolean GetMarried(){
-	return Married ;
+	return married ;
     }
 
     // This method returns true if the object "other"
@@ -33,12 +33,12 @@ class Element {
 	ret_val = true ;
 
 	aux01 = other.GetAge();
-	if (!this.Compare(aux01,Age)) ret_val = false ;
+	if (!this.Compare(aux01,age)) ret_val = false ;
 	else { 
 	    aux02 = other.GetSalary();
-	    if (!this.Compare(aux02,Salary)) ret_val = false ;
+	    if (!this.Compare(aux02,salary)) ret_val = false ;
 	    else 
-		if (Married) 
+		if (married) 
 		    if (!other.GetMarried()) ret_val = false;
 		    else nt = 0 ;
 		else

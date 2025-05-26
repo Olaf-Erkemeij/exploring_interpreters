@@ -6,7 +6,7 @@ global;
 class MyClass {
   int field;
   
-  public int add_global_field() {
+  public int Add_global_field() {
     field = field + global;
     return field;
   }
@@ -15,9 +15,9 @@ class MyClass {
 MyClass object;
 object = new MyClass();
 
-object.add_global_field(); 
-object.add_global_field(); 
+object.Add_global_field(); 
+object.Add_global_field(); 
 
 global = 100;
 
-object.add_global_field();
+object.Add_global_field();
