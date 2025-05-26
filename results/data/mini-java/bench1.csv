@@ -3,4 +3,4 @@ Plain    , 2.287 ms, 65.10 μs
 Default  , 5.166 ms, 142.1 μs
 Patch    , 5.039 s , 165.5 ms
 Improved , 4.891 ms, 149.4 μs
-Disk     , 9.871 s , 1.675 s
+Disk     , 9.304 s , 954.6 ms

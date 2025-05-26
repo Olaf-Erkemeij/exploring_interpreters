@@ -635,7 +635,6 @@ runFinalExperiment3 = do
   files <- getDirectoryContents "examples/repl"
   forM_ files $ \file -> when (".minijava" `isSuffixOf` file) $ do
     let path = "examples/repl/" ++ file
-    putStrLn path
     handle <- openFile path ReadMode
     contents <- hGetContents handle
     let explr1 = EM1.mkExplorerNoSharing Pi.runPhrase initialContext
@@ -762,7 +761,6 @@ getFileContent file = do
     [] -> error "No parse"
     (x@(PSeq _ _) : _) -> do
       let phrases = sequenceToList x
-      putStrLn $ "Parsed " ++ show (length phrases) ++ " phrases"
       return phrases
     _ -> error "Not a sequence"
 

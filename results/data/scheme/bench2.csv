@@ -1,5 +1,5 @@
 benchmark, mean    , stddev
 Default  , 138.5 μs, 4.333 μs
 Patch    , 75.43 μs, 1.766 μs
-Improved , 197.7 μs, 4.517 μs
+Improved , 127.7 μs, 3.838 μs
 Disk     , 18.59 ms, 8.645 ms
