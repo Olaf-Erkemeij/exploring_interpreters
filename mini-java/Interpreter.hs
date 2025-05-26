@@ -15,8 +15,7 @@ import Data.Hashable
 import GHC.IO.Handle.Text (commitBuffer')
 import GHC.RTS.Flags (CCFlags (msecsPerTick))
 import GHC.Generics (Generic)
-import Data.Aeson (ToJSON)
-import Data.Aeson.Types (FromJSON)
+import Data.Aeson (ToJSON, FromJSON, defaultOptions, genericToEncoding, toEncoding)
 import Data.Binary (Binary)
 
 -- import GHC.DataSize
@@ -39,7 +38,8 @@ data Val
   | ListLit [Val]
   deriving (Generic, Eq)
 
-instance ToJSON Val
+instance ToJSON Val where
+  toEncoding = genericToEncoding defaultOptions
 instance FromJSON Val
 instance Binary Val
 
@@ -80,7 +80,8 @@ instance NFData Val where
 instance NFData Context where
   rnf (Context e s o g f r se) = rnf e `seq` rnf s `seq` rnf o `seq` rnf g `seq` rnf f `seq` rnf r `seq` rnf se
 
-instance ToJSON Context
+instance ToJSON Context where
+  toEncoding = genericToEncoding defaultOptions
 instance FromJSON Context
 instance Binary Context
 
