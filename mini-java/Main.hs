@@ -4,16 +4,16 @@
 module Main where
 
 import Abs
-import Control.DeepSeq
 import Control.Monad
 import Criterion.Main as CM
 import Criterion.Types (Config (timeLimit), Verbosity (Verbose), resamples, verbosity)
-import Data.Functor
+import Data.List (isSuffixOf)
 import qualified Data.Map as M
+import Data.Maybe (fromJust)
 import Data.Tree (drawTree)
-import GHC.DataSize
+import GHC.DataSize (recursiveSizeNF)
 import GLL.Combinators
-import Interpreter
+import Interpreter (Context (env, store), initialContext)
 import qualified Language.Explorer.Compressed as EM6
 import qualified Language.Explorer.Disk as EM7
 import Language.Explorer.Monadic as EM1
@@ -21,10 +21,10 @@ import qualified Language.Explorer.Monadic2 as EM2
 import qualified Language.Explorer.Monadic3 as EM3
 import qualified Language.Explorer.Monadic4 as EM4
 import qualified Language.Explorer.Monadic5 as EM5
-import Language.Explorer.Tools.Protocol
-import Language.Explorer.Tools.REPL
+import Language.Explorer.Tools.Protocol (ExplorerPostValue)
+import Language.Explorer.Tools.REPL (metaTable, repl)
 import qualified SeqInterpreter as Pi
-import System.Directory
+import System.Directory (getDirectoryContents)
 import System.IO
 import System.PosixCompat (fileSize, getFileStatus)
 import Test.QuickCheck hiding (within)
@@ -285,11 +285,20 @@ main =
           CM.env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkJump2 explr),
           CM.env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkJump3 explr),
           CM.env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkJump4 explr)
+        ],
+      bgroup
+        "files"
+        [ CM.env (getFileContent path) $ \program -> bench "Plain"    $ nfIO   (benchmarkFile1 program),
+          CM.env (getFileContent path) $ \program -> bench "Default"  $ nfIO   (benchmarkFile2 program),
+          CM.env (getFileContent path) $ \program -> bench "Improved" $ nfIO   (benchmarkFile3 program),
+          CM.env (getFileContent path) $ \program -> bench "Disk"     $ whnfIO (benchmarkFile4 program),
+          CM.env (getFileContent path) $ \program -> bench "Patch"    $ nfIO   (benchmarkFile5 program)
         ]
     ]
   where
     n = 250
     p = 0.5
+    path = "examples/repl/BinaryTreeLarge.minijava"
 
 replParser :: String -> p -> Either String Phrase
 replParser s _ = parser s
@@ -619,16 +628,18 @@ runFinalExperiment2 handles n p = do
     size7 <- fileSize <$> getFileStatus "mini-java.db"
     hPutStrLn (handles !! 6) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show size7
 
-runFinalExperiment3 :: String -> IO ()
-runFinalExperiment3 path = do
+runFinalExperiment3 :: IO ()
+runFinalExperiment3 = do
   resultHandle <- openFile "../results/data/mini-java/repl.csv" WriteMode
-  hPutStrLn resultHandle "File,V1,V5,V7"
+  hPutStrLn resultHandle "File,V1,V4,V5,V7"
   files <- getDirectoryContents "examples/repl"
-  forM_ files $ \file -> do
-    unless (take 1 (reverse file) == "a") $ return ()
-    handle <- openFile file ReadMode
+  forM_ files $ \file -> when (".minijava" `isSuffixOf` file) $ do
+    let path = "examples/repl/" ++ file
+    putStrLn path
+    handle <- openFile path ReadMode
     contents <- hGetContents handle
     let explr1 = EM1.mkExplorerNoSharing Pi.runPhrase initialContext
+    let explr4 = EM4.mkExplorerNoSharing Pi.runPhrase initialContext
     let explr5 = EM5.mkExplorerNoSharing Pi.runPhrase initialContext
     explr7 <- EM7.mkExplorerIO EM7.defaultSettings "mini-java.db" Pi.runPhrase initialContext
 
@@ -636,15 +647,18 @@ runFinalExperiment3 path = do
       [] -> return ()
       (x : _) -> do
         (newExplr1, _) <- EM1.execute x explr1
+        (newExplr4, _) <- EM4.execute x explr4
         (newExplr5, _) <- EM5.execute x explr5
         _ <- EM7.execute x explr7
 
         cmap1 <- recursiveSizeNF (EM1.cmap newExplr1)
         exec1 <- recursiveSizeNF (EM1.execEnv newExplr1)
+        cmap4 <- recursiveSizeNF (EM4.cmap newExplr4)
+        exec4 <- recursiveSizeNF (EM4.execEnv newExplr4)
         history5 <- recursiveSizeNF (EM5.history newExplr5)
         size7 <- fileSize <$> getFileStatus "mini-java.db"
 
-        hPutStrLn resultHandle $ show file ++ "," ++ show (cmap1 + exec1) ++ "," ++ show history5 ++ "," ++ show size7
+        hPutStrLn resultHandle $ show file ++ "," ++ show (cmap1 + exec1) ++ "," ++ show (cmap4 + exec4) ++ "," ++ show history5 ++ "," ++ show size7
 
     hClose handle
   hClose resultHandle
@@ -735,6 +749,57 @@ benchmarkJump4 explr = do
   case EM4.jump jumpRef explr of
     Just newExplr -> return newExplr
     Nothing -> return explr
+
+-- Fourth benchmark: Time to go handle complex program
+sequenceToList :: Phrase -> [Phrase]
+sequenceToList (PSeq a b) = sequenceToList a ++ sequenceToList b
+sequenceToList x = [x]
+
+getFileContent :: String -> IO [Phrase]
+getFileContent file = do
+  contents <- readFile file
+  case parse parsePhrase (lexer lexerSettings contents) of
+    [] -> error "No parse"
+    (x@(PSeq _ _) : _) -> do
+      let phrases = sequenceToList x
+      putStrLn $ "Parsed " ++ show (length phrases) ++ " phrases"
+      return phrases
+    _ -> error "Not a sequence"
+
+benchmarkFile1 :: [Phrase] -> IO Context
+benchmarkFile1 = foldM step initialContext
+  where
+    step ctx phrase = fromJust . fst <$> Pi.runPhrase phrase ctx
+
+benchmarkFile2 :: [Phrase] -> IO Context
+benchmarkFile2 program = do
+  let explr = EM1.mkExplorerNoSharing Pi.runPhrase initialContext
+  newExplr <- foldM step explr program
+  return $ EM1.config newExplr
+  where
+    step explr phrase = fst <$> EM1.execute phrase explr
+
+benchmarkFile3 :: [Phrase] -> IO Context
+benchmarkFile3 phrases = do
+  let explr = EM5.mkExplorerNoSharing Pi.runPhrase initialContext
+  newExplr <- foldM step explr phrases
+  return $ EM5.config newExplr
+  where
+    step explr phrase = fst <$> EM5.execute phrase explr
+
+benchmarkFile4 :: [Phrase] -> IO Context
+benchmarkFile4 phrases = do
+  explr <- EM7.mkExplorerIO EM7.defaultSettings "mini-java.db" Pi.runPhrase initialContext
+  forM_ phrases (`EM7.execute` explr)
+  EM7.config explr
+
+benchmarkFile5 :: [Phrase] -> IO Context
+benchmarkFile5 phrases = do
+  let explr = EM4.mkExplorerNoSharing Pi.runPhrase initialContext
+  newExplr <- foldM step explr phrases
+  return $ EM4.config newExplr
+  where
+    step explr phrase = fst <$> EM4.execute phrase explr
 
 -- TESTING: COMPARE VERSIONS ON THE SAME TREE
 randomTreeTwo :: Int -> Float -> IO (IO (EM7.Explorer Phrase Context [String]), IO (EM1.Explorer Phrase IO Context [String]))
