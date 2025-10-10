@@ -17,8 +17,6 @@ executable scheme
     main-is:          Main.hs
     other-modules:    Abs
                       Interpreter
-    --                   SeqInterpreter
-    --                   JSON
 
     -- other-extensions:
     build-depends: base
@@ -27,13 +25,10 @@ executable scheme
                 , mtl
                 , exploring-interpreters >= 1.1.0.0
                 , aeson
-                , text
                 , QuickCheck >= 2.7
                 , deepseq
                 , ghc-datasize
                 , regex-applicative
-                , unordered-containers
-                , fgl
                 , binary
                 , unix-compat
                 , criterion

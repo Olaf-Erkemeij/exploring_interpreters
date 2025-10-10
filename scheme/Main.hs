@@ -169,8 +169,8 @@ runFinalExperiments = do
     when (i == 7) $ do
       hPutStrLn handle "N,P,X,Filesize"
     return handle
-  forM_ [(0 :: Integer) .. 10] $ \p -> runFinalExperiment handles 100 (fromIntegral p / 10)
-  -- forM_ [(0::Integer)..10] $ \p -> runFinalExperiment2 handles 500 (fromIntegral p / 10)
+  -- forM_ [(0 :: Integer) .. 10] $ \p -> runFinalExperiment handles 100 (fromIntegral p / 10)
+  forM_ [(0::Integer)..10] $ \p -> runFinalExperiment2 handles 200 (fromIntegral p / 10)
   mapM_ hClose handles
 
 runDiskExperiment :: IO ()
@@ -195,7 +195,7 @@ runFinalExperiment handles@[h1, h2, h3, h4, h5, h6, h7] n p = do
   runFinalExperiment handles (n - 1) p
   forM_ [(1 :: Integer) .. 5] $ \x -> do
     print (n, p, x)
-    (explr1, explr2, explr3, explr4, explr5, explr6, _) <- randomTrees n p
+    (explr1, explr2, explr3, explr4, explr5, explr6, explr7) <- randomTrees n p
     cmap1 <- recursiveSizeNF (EM1.cmap explr1)
     exec1 <- recursiveSizeNF (EM1.execEnv explr1)
     hPutStrLn h1 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap1 ++ "," ++ show exec1
@@ -222,7 +222,9 @@ runFinalExperiment handles@[h1, h2, h3, h4, h5, h6, h7] n p = do
     hPutStrLn h6 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap6 ++ "," ++ show exec6
 
     size7 <- fileSize <$> getFileStatus "scheme.db"
-    hPutStrLn h7 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show size7
+    cache <- EM7.getCacheContent explr7
+    cacheSize <- recursiveSizeNF cache
+    hPutStrLn h7 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show size7 ++ "," ++ show cacheSize
 runFinalExperiment _ _ _ = return ()
 
 runFinalExperiment2 :: [Handle] -> Int -> Float -> IO ()
@@ -231,7 +233,7 @@ runFinalExperiment2 handles n p = do
   runFinalExperiment2 handles (n - 100) p
   forM_ [(1 :: Integer) .. 5] $ \x -> do
     print (n, p, x)
-    (explr1, explr2, explr3, explr4, explr5, explr6, _) <- randomTrees n p
+    (explr1, explr2, explr3, explr4, explr5, explr6, explr7) <- randomTrees n p
     cmap1 <- recursiveSizeNF (EM1.cmap explr1)
     exec1 <- recursiveSizeNF (EM1.execEnv explr1)
     hPutStrLn (head handles) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap1 ++ "," ++ show exec1
@@ -258,7 +260,9 @@ runFinalExperiment2 handles n p = do
     hPutStrLn (handles !! 5) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap6 ++ "," ++ show exec6
 
     size7 <- fileSize <$> getFileStatus "scheme.db"
-    hPutStrLn (handles !! 6) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show size7
+    cache <- EM7.getCacheContent explr7
+    cacheSize <- recursiveSizeNF cache
+    hPutStrLn (handles !! 6) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show size7 ++ "," ++ show cacheSize
 
 -- First benchmark: Time to execute N expressions in a row
 benchmarkExecute1 :: Int -> IO Context
