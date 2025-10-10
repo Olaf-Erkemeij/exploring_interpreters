@@ -198,6 +198,11 @@ getCache (Explorer stateRef) = do
   ExplorerState {..} <- readIORef stateRef
   return cache
 
+getCacheContent :: (Storable p c o) => Explorer p c o -> IO [(Ref, ExpNode p c o)]
+getCacheContent (Explorer stateRef) = do
+  ExplorerState {..} <- readIORef stateRef
+  LRU.toList cache
+
 getCurrRef :: (Storable p c o) => Explorer p c o -> IO Ref
 getCurrRef (Explorer stateRef) = do
   ExplorerState {..} <- readIORef stateRef

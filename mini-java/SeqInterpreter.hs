@@ -5,6 +5,7 @@ import Control.Monad.State.Lazy
 import Data.List
 import qualified Data.Map as M
 import qualified Interpreter as Interp
+import Control.Monad (void)
 
 eval :: Phrase -> Interp.JavaState ()
 eval (PExpr e) = Interp.exec $ Print e

@@ -10,6 +10,7 @@ import Data.Binary (Binary)
 import Data.List ((\\))
 import qualified Data.Map as M
 import GHC.Generics (Generic)
+import Control.Monad ( when )
 
 data Func
   = Head [String] Func
