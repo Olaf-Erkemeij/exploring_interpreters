@@ -31,7 +31,7 @@ import System.IO
     IOMode (AppendMode, WriteMode),
     hClose,
     hPutStrLn,
-    openFile,
+    openFile, hPutStr, hPrint,
   )
 import System.PosixCompat (fileSize, getFileStatus)
 import Test.QuickCheck (choose, generate)
@@ -544,3 +544,44 @@ compareTrees explr1 explr2 = do
   tree1 <- EM7.toTree explr1
   let tree2 = EM1.toTree explr2
   return $ tree1 == tree2
+
+
+-- Testing in-memory database
+testInMemoryDB :: Bool -> IO ()
+testInMemoryDB inMemory = do
+  handle <- openFile "../results/data/scheme/sqlite.csv" AppendMode
+  runDisk handle 500 1
+  -- forM_ [(0 :: Integer) .. 10] $ \p -> runDisk handle 500 (fromIntegral p / 10)
+  hClose handle
+  where
+    runDisk _ 400 _ = return ()
+    runDisk h n p = do
+      runDisk h (n - 100) p
+      -- forM_ [(1 :: Integer) .. 5] $ \x -> do
+      print (n, p)
+      _ <- randomTreeDisk2 inMemory n p
+      size <- fileSize <$> getFileStatus "scheme.db"
+    -- If not in memory, write filesize to handle
+      unless inMemory $ hPutStr h $ show n ++ "," ++ show p ++ "," ++ show size ++ ","
+    -- Wait for input from the user to continue
+      putStr "Measurement: "
+      measurement <- (read <$> getLine) :: IO Int
+      when inMemory $ hPrint h measurement
+      unless inMemory $ hPutStr h $ show measurement ++ ","
+
+
+randomTreeDisk2 :: Bool -> Int -> Float -> IO (EM7.Explorer Expr Context [String])
+randomTreeDisk2 False 1 _ = EM7.mkExplorerIO EM7.defaultSettings "scheme.db" runExpr initialContext
+randomTreeDisk2 True 1 _ = EM7.mkExplorerIO EM7.defaultSettings ":memory:" runExpr initialContext
+randomTreeDisk2 inMemory n p = do
+  explr <- randomTreeDisk2 inMemory (n - 1) p
+  randExpr <- generate genExprValid
+  jumpCond <- generate $ choose (0.0, 1.0)
+  when (jumpCond <= p) $ do
+    curr <- EM7.getCurrRef explr
+    jumpRef <- generate (choose (1, curr - 1))
+    _ <- EM7.jump jumpRef explr
+    return ()
+
+  _ <- EM7.execute randExpr explr
+  return explr
