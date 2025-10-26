@@ -35,7 +35,10 @@ library
       Language.Explorer.Tools.REPL2,
       Language.Explorer.Tools.Protocol,
       Language.Explorer.Tools.Diff,
-      Language.Explorer.Tools.DiskStore
+      Language.Explorer.Tools.DiskStore,
+      Language.Explorer.MonadicClass,
+      Language.Explorer.DiskClass,
+      Language.Explorer.Class
   other-modules:
       Language.Explorer.Basic
   -- other-extensions:
