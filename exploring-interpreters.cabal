@@ -39,6 +39,8 @@ library
       Language.Explorer.MonadicClass,
       Language.Explorer.DiskClass,
       Language.Explorer.Class
+      Language.Explorer.Storage.Disk
+      Language.Explorer.Storage
   other-modules:
       Language.Explorer.Basic
   -- other-extensions:

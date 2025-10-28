@@ -5,6 +5,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances, ExplicitForAll #-}
+
 
 module Language.Explorer.DiskClass where
 
@@ -76,6 +78,7 @@ defaultSettings =
       cacheSize = 10,
       compressionLevel = 3
     }
+
 
 mkExplorerIO ::
   (Language p IO c o, Storable p c o) =>
