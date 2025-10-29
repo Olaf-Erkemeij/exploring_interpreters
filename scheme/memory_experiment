@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+RESULTS_FILE="../results/data/scheme/sqlite.csv"
+EXECUTABLE="scheme"
+N=500
+
+echo "N,P,Filesize,OnDisk,InMemory" >> "${RESULTS_FILE}"
+
+for p in $(seq -f "%.1f" 0.1 0.1 1.0); do
+  echo "=== p = ${p} ==="
+  ondisk_peaks=()
+  onsave_fileSize=()
+  inmemory_peaks=()
+
+  # On Disk Database
+  for run in {1..20}; do
+    echo "Run OFF #$run for p=${p}"
+    rm -f scheme.db
+    valgrind --tool=massif --massif-out-file=massif_on_p${p}_run${run}.out \
+      ${EXECUTABLE} ${p} false +RTS -s
+    lineno=$(grep -n "heap_tree=peak" massif_on_p${p}_run${run}.out | cut -d : -f 1)
+    peak=$(sed -n -e "$((lineno-3))p" massif_on_p${p}_run${run}.out | awk '{split($0,a,"="); print a[2]}')
+    filesize=$(stat --printf="%s" scheme.db)
+    ondisk_peaks+=("${peak}")
+    onsave_fileSize+=("${filesize}")
+  done
+
+  # In Memory Database
+  for run in {1..20}; do
+    echo "Run ON #$run for p=${p}"
+    rm -f scheme.db
+    valgrind --tool=massif --massif-out-file=massif_on_p${p}_run${run}.out \
+      ${EXECUTABLE} ${p} true +RTS -s
+    lineno=$(grep -n "heap_tree=peak" massif_on_p${p}_run${run}.out | cut -d : -f 1)
+    peak=$(sed -n -e "$((lineno-3))p" massif_on_p${p}_run${run}.out | awk '{split($0,a,"="); print a[2]}')
+    inmemory_peaks+=("${peak}")
+  done
+
+  # Compute averages
+  avg() {
+    local arr=("$@")
+    local sum=0
+    for v in "${arr[@]}"; do sum=$(( sum + v )); done
+    echo $(( sum / ${#arr[@]} ))
+  }
+
+  avg_filesize=$(avg "${onsave_fileSize[@]}")
+  avg_ondisk_peak=$(avg "${ondisk_peaks[@]}")
+  avg_inmemory_peak=$(avg "${inmemory_peaks[@]}")
+
+  echo "${N},${p},${avg_filesize},${avg_ondisk_peak},${avg_inmemory_peak}" >> "${RESULTS_FILE}"
+done

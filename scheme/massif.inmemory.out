@@ -1,0 +1,1486 @@
+desc: --massif-out-file=massif.inmemory.out
+cmd: scheme inmemory
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=17096632
+mem_heap_B=1200376
+mem_heap_extra_B=6176
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=35325347
+mem_heap_B=2471184
+mem_heap_extra_B=10800
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=46629084
+mem_heap_B=3245736
+mem_heap_extra_B=13632
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=63284425
+mem_heap_B=4401424
+mem_heap_extra_B=17816
+mem_stacks_B=0
+heap_tree=detailed
+n3: 4401424 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 4340344 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n3: 4340344 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 4252664 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 4240344 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 4240344 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 4235968 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 4235968 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 4218464 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 4218464 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 4218464 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 4218464 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 4218464 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 17504 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n1: 48008 0x6B18C5: setupLookaside (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 48008 0x7ADF10: openDatabase (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n0: 48008 0x6A0223: ??? (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n0: 39672 in 30 places, all below massif's threshold (1.00%)
+ n1: 56352 0x13FE490: stgMallocBytes (RtsUtils.c:64)
+  n0: 56352 in 21 places, all below massif's threshold (1.00%)
+ n0: 4728 in 9 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=5
+#-----------
+time=74141060
+mem_heap_B=5126856
+mem_heap_extra_B=20480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=90006865
+mem_heap_B=6212104
+mem_heap_extra_B=24448
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=106377897
+mem_heap_B=7319232
+mem_heap_extra_B=28496
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=127330836
+mem_heap_B=8750184
+mem_heap_extra_B=33728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=141236483
+mem_heap_B=9707408
+mem_heap_extra_B=37168
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=163674949
+mem_heap_B=11230256
+mem_heap_extra_B=42736
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=180866473
+mem_heap_B=12425712
+mem_heap_extra_B=47056
+mem_stacks_B=0
+heap_tree=detailed
+n2: 12425712 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12364632 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 12364632 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 12247616 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 12235296 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 12235296 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 12230920 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 12230920 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 12195912 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 12195912 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 12195912 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 12195912 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 12195912 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 35008 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 117016 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=12
+#-----------
+time=194595126
+mem_heap_B=13335112
+mem_heap_extra_B=50432
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=209726582
+mem_heap_B=14390536
+mem_heap_extra_B=54240
+mem_stacks_B=0
+heap_tree=detailed
+n2: 14390536 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14329456 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 14329456 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 14212440 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 14200120 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 14200120 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 14195744 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 14195744 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 14156360 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 14156360 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 14156360 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 14156360 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 14156360 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 39384 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 117016 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=14
+#-----------
+time=234494920
+mem_heap_B=16052608
+mem_heap_extra_B=60368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=256815245
+mem_heap_B=17571080
+mem_heap_extra_B=65920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=267634936
+mem_heap_B=18352952
+mem_heap_extra_B=68608
+mem_stacks_B=0
+heap_tree=detailed
+n2: 18352952 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 18291872 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 18291872 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 18142088 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 18129768 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 18129768 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 18125392 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 18125392 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 18077256 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 18077256 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 18077256 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 18077256 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 18077256 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 48136 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 149784 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=17
+#-----------
+time=282944702
+mem_heap_B=19371752
+mem_heap_extra_B=72384
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=299597424
+mem_heap_B=20528304
+mem_heap_extra_B=76560
+mem_stacks_B=0
+heap_tree=detailed
+n2: 20528304 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 20467224 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 20467224 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 20316960 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 20304640 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 20304640 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 20300264 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 20300264 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 20247752 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 20247752 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 20247752 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 20247752 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 20247752 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 52512 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 150264 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=19
+#-----------
+time=312030806
+mem_heap_B=21349704
+mem_heap_extra_B=79616
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=328457611
+mem_heap_B=22474064
+mem_heap_extra_B=83728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=339309588
+mem_heap_B=23205128
+mem_heap_extra_B=86400
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=358374692
+mem_heap_B=24523752
+mem_heap_extra_B=91168
+mem_stacks_B=0
+heap_tree=detailed
+n2: 24523752 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 24462672 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 24462672 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 24312248 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 24299928 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 24299928 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 24295552 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 24295552 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 24234288 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 24234288 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 24234288 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 24234288 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 24234288 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 61264 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 150424 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=23
+#-----------
+time=378597230
+mem_heap_B=25874488
+mem_heap_extra_B=96160
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=392444253
+mem_heap_B=26806576
+mem_heap_extra_B=99568
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=404411848
+mem_heap_B=27620512
+mem_heap_extra_B=102544
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=418254354
+mem_heap_B=28552600
+mem_heap_extra_B=105952
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=436460031
+mem_heap_B=29808560
+mem_heap_extra_B=110488
+mem_stacks_B=0
+heap_tree=detailed
+n2: 29808560 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 29747480 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 29747480 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 29598456 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 29586136 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 29586136 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 29581760 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 29581760 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 29507368 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 29507368 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 29507368 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 29507368 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 29507368 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 74392 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 149024 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=28
+#-----------
+time=462187632
+mem_heap_B=31554504
+mem_heap_extra_B=116872
+mem_stacks_B=0
+heap_tree=detailed
+n2: 31554504 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 31493424 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 31493424 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 31344480 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 31332160 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 31332160 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 31327784 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 31327784 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 31249016 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 31249016 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 31249016 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 31249016 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 31249016 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 78768 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 148944 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=29
+#-----------
+time=477551224
+mem_heap_B=32594392
+mem_heap_extra_B=120680
+mem_stacks_B=0
+heap_tree=detailed
+n2: 32594392 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 32533312 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 32533312 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 32385968 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 32373648 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 32373648 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 32369272 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 32369272 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 32286128 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 32286128 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 32286128 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 32286128 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 32286128 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 83144 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 147344 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=30
+#-----------
+time=503278773
+mem_heap_B=34340416
+mem_heap_extra_B=127064
+mem_stacks_B=0
+heap_tree=detailed
+n2: 34340416 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 34279336 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 34279336 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 34131992 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 34119672 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 34119672 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 34115296 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 34115296 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 34027776 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 34027776 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 34027776 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 34027776 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 34027776 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 87520 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 147344 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=31
+#-----------
+time=514052620
+mem_heap_B=35068472
+mem_heap_extra_B=129728
+mem_stacks_B=0
+heap_tree=detailed
+n2: 35068472 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 35007392 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 35007392 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 34858408 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 34846088 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 34846088 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 34841712 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 34841712 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 34754192 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 34754192 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 34754192 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 34754192 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 34754192 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 87520 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 148984 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=32
+#-----------
+time=529104127
+mem_heap_B=36179768
+mem_heap_extra_B=133376
+mem_stacks_B=0
+heap_tree=detailed
+n2: 36179768 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 36118688 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 36118688 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 35856408 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 35848192 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 35848192 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 35843816 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 35843816 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 35751920 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 35751920 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 35751920 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 35751920 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 35751920 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 91896 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 8216 in 4 places, all below massif's threshold (1.00%)
+   n0: 262280 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=33
+#-----------
+time=550261741
+mem_heap_B=37549552
+mem_heap_extra_B=138608
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=569668124
+mem_heap_B=38862352
+mem_heap_extra_B=143408
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=580837199
+mem_heap_B=39644024
+mem_heap_extra_B=146216
+mem_stacks_B=0
+heap_tree=detailed
+n2: 39644024 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 39582944 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 39582944 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 39370064 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 39357744 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 39357744 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 39353368 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 39353368 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 39252720 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 39252720 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 39252720 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 39252720 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 39252720 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 100648 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=36
+#-----------
+time=595459204
+mem_heap_B=40612752
+mem_heap_extra_B=149808
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=606601322
+mem_heap_B=41390048
+mem_heap_extra_B=152600
+mem_stacks_B=0
+heap_tree=detailed
+n2: 41390048 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 41328968 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 41328968 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 41116088 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 41103768 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 41103768 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 41099392 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 41099392 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 40994368 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 40994368 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 40994368 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 40994368 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 40994368 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 105024 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=38
+#-----------
+time=621222789
+mem_heap_B=42358776
+mem_heap_extra_B=156192
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=646923712
+mem_heap_B=44100424
+mem_heap_extra_B=162560
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=658092518
+mem_heap_B=44882096
+mem_heap_extra_B=165368
+mem_stacks_B=0
+heap_tree=detailed
+n2: 44882096 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 44821016 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 44821016 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 44608136 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 44595816 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 44595816 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 44591440 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 44591440 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 44477664 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 44477664 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 44477664 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 44477664 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 44477664 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 113776 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=41
+#-----------
+time=672713624
+mem_heap_B=45850824
+mem_heap_extra_B=168960
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=683856779
+mem_heap_B=46628120
+mem_heap_extra_B=171752
+mem_stacks_B=0
+heap_tree=detailed
+n2: 46628120 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 46567040 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 46567040 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 46354160 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 46341840 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 46341840 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 46337464 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 46337464 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 46219312 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 46219312 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 46219312 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 46219312 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 46219312 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 118152 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=43
+#-----------
+time=709583698
+mem_heap_B=48374144
+mem_heap_extra_B=178136
+mem_stacks_B=0
+heap_tree=detailed
+n2: 48374144 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 48313064 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 48313064 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 48100184 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 48087864 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 48087864 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 48083488 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 48083488 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 47960960 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 47960960 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 47960960 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 47960960 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 47960960 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 122528 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=44
+#-----------
+time=724205962
+mem_heap_B=49342872
+mem_heap_extra_B=181728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=735348169
+mem_heap_B=50120168
+mem_heap_extra_B=184520
+mem_stacks_B=0
+heap_tree=detailed
+n2: 50120168 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 50059088 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 50059088 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 49846208 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 49833888 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 49833888 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 49829512 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 49829512 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 49702608 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 49702608 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 49702608 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 49702608 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 49702608 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 126904 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=46
+#-----------
+time=749969629
+mem_heap_B=51088896
+mem_heap_extra_B=188112
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=775670900
+mem_heap_B=52830544
+mem_heap_extra_B=194480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=786839789
+mem_heap_B=53612216
+mem_heap_extra_B=197288
+mem_stacks_B=0
+heap_tree=detailed
+n2: 53612216 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 53551136 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 53551136 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 53338256 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 53325936 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 53325936 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 53321560 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 53321560 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 53185904 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 53185904 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 53185904 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 53185904 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 53185904 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 135656 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=49
+#-----------
+time=793103768
+mem_heap_B=54016440
+mem_heap_extra_B=198816
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=795166677
+mem_heap_B=54178000
+mem_heap_extra_B=199352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 54178000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 54116920 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 54116920 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 53902760 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 53890440 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 53890440 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 53886064 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 53886064 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 53750408 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 53750408 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 53750408 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 53750408 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 53750408 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 135656 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214160 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=51
+#-----------
+time=805941248
+mem_heap_B=54887264
+mem_heap_extra_B=202000
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=812604382
+mem_heap_B=55358240
+mem_heap_extra_B=203672
+mem_stacks_B=0
+heap_tree=detailed
+n2: 55358240 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 55297160 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 55297160 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 55084280 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 55071960 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 55071960 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 55067584 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 55067584 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 54927552 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 54927552 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 54927552 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 54927552 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 54927552 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 140032 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=53
+#-----------
+time=820931172
+mem_heap_B=55924024
+mem_heap_extra_B=205736
+mem_stacks_B=0
+heap_tree=detailed
+n2: 55924024 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 55862944 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 55862944 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 55648784 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 55636464 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 55636464 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 55632088 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 55632088 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 55492056 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 55492056 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 55492056 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 55492056 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 55492056 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 140032 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214160 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=54
+#-----------
+time=831705784
+mem_heap_B=56633288
+mem_heap_extra_B=208384
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=838331207
+mem_heap_B=57104264
+mem_heap_extra_B=210056
+mem_stacks_B=0
+heap_tree=detailed
+n2: 57104264 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 57043184 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 57043184 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 56830304 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 56817984 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 56817984 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 56813608 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 56813608 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 56669200 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 56669200 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 56669200 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 56669200 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 56669200 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 144408 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=56
+#-----------
+time=848050687
+mem_heap_B=57762144
+mem_heap_extra_B=212464
+mem_stacks_B=0
+heap_tree=detailed
+n2: 57762144 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 57701064 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 57701064 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 57486704 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 57474384 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 57474384 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 57470008 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 57470008 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 57325600 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 57325600 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 57325600 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 57325600 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 57325600 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 144408 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214360 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=57
+#-----------
+time=858866716
+mem_heap_B=58475584
+mem_heap_extra_B=215120
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=864095586
+mem_heap_B=58850288
+mem_heap_extra_B=216440
+mem_stacks_B=0
+heap_tree=detailed
+n2: 58850288 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 58789208 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 58789208 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 58576328 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 58564008 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 58564008 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 58559632 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 58559632 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 58410848 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 58410848 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 58410848 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 58410848 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 58410848 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 148784 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=59
+#-----------
+time=873777900
+mem_heap_B=59508168
+mem_heap_extra_B=218848
+mem_stacks_B=0
+heap_tree=detailed
+n2: 59508168 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 59447088 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 59447088 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 59232728 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 59220408 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 59220408 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 59216032 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 59216032 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 59067248 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 59067248 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 59067248 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 59067248 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 59067248 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 148784 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214360 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=60
+#-----------
+time=884630336
+mem_heap_B=60221608
+mem_heap_extra_B=221504
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=889859440
+mem_heap_B=60596312
+mem_heap_extra_B=222824
+mem_stacks_B=0
+heap_tree=detailed
+n2: 60596312 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 60535232 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 60535232 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 60322352 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 60310032 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 60310032 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 60305656 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 60305656 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 60152496 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 60152496 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 60152496 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 60152496 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 60152496 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 153160 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=62
+#-----------
+time=899542162
+mem_heap_B=61254192
+mem_heap_extra_B=225232
+mem_stacks_B=0
+heap_tree=detailed
+n2: 61254192 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 61193112 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 61193112 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 60978752 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 60966432 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 60966432 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 60962056 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 60962056 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 60808896 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 60808896 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 60808896 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 60808896 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 60808896 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 153160 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214360 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=63
+#-----------
+time=910357286
+mem_heap_B=61967632
+mem_heap_extra_B=227888
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=915586742
+mem_heap_B=62342336
+mem_heap_extra_B=229208
+mem_stacks_B=0
+heap_tree=detailed
+n2: 62342336 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 62281256 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 62281256 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 62068376 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 62056056 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 62056056 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 62051680 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 62051680 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 61894144 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 61894144 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 61894144 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 61894144 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 61894144 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 157536 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=65
+#-----------
+time=925268946
+mem_heap_B=63000216
+mem_heap_extra_B=231616
+mem_stacks_B=0
+heap_tree=detailed
+n2: 63000216 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 62939136 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 62939136 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 62724776 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 62712456 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 62712456 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 62708080 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 62708080 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 62550544 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 62550544 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 62550544 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 62550544 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 62550544 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 157536 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214360 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=66
+#-----------
+time=936057640
+mem_heap_B=63709280
+mem_heap_extra_B=234256
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=941350341
+mem_heap_B=64088360
+mem_heap_extra_B=235592
+mem_stacks_B=0
+heap_tree=detailed
+n2: 64088360 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 64027280 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 64027280 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 63814400 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 63802080 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 63802080 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 63797704 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 63797704 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 63635792 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 63635792 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 63635792 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 63635792 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 63635792 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 161912 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=68
+#-----------
+time=951033401
+mem_heap_B=64746240
+mem_heap_extra_B=238000
+mem_stacks_B=0
+heap_tree=detailed
+n2: 64746240 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 64685160 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 64685160 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 64470800 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 64458480 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 64458480 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 64454104 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 64454104 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 64292192 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 64292192 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 64292192 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 64292192 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 64292192 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 161912 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214360 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=69
+#-----------
+time=961848526
+mem_heap_B=65459680
+mem_heap_extra_B=240656
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=967114756
+mem_heap_B=65834384
+mem_heap_extra_B=241976
+mem_stacks_B=0
+heap_tree=detailed
+n2: 65834384 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 65773304 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 65773304 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 65560424 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 65548104 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 65548104 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 65543728 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 65543728 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 65377440 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 65377440 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 65377440 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 65377440 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 65377440 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 166288 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=71
+#-----------
+time=977514941
+mem_heap_B=66540520
+mem_heap_extra_B=244552
+mem_stacks_B=0
+heap_tree=detailed
+n2: 66540520 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 66479440 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 66479440 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 66264960 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 66252640 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 66252640 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 66248264 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 66248264 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 66081976 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 66081976 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 66081976 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 66081976 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 66081976 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 166288 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214480 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=72
+#-----------
+time=988311149
+mem_heap_B=67253840
+mem_heap_extra_B=247216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=992841940
+mem_heap_B=67580408
+mem_heap_extra_B=248360
+mem_stacks_B=0
+heap_tree=detailed
+n2: 67580408 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 67519328 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 67519328 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 67306448 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 67294128 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 67294128 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 67289752 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 67289752 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 67119088 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 67119088 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 67119088 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 67119088 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 67119088 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 170664 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=74
+#-----------
+time=1003242001
+mem_heap_B=68286544
+mem_heap_extra_B=250936
+mem_stacks_B=0
+heap_tree=detailed
+n2: 68286544 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 68225464 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 68225464 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 68010984 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 67998664 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 67998664 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 67994288 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 67994288 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 67823624 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 67823624 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 67823624 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 67823624 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 67823624 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 170664 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214480 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=75
+#-----------
+time=1014074610
+mem_heap_B=68999864
+mem_heap_extra_B=253600
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=1018605424
+mem_heap_B=69326432
+mem_heap_extra_B=254744
+mem_stacks_B=0
+heap_tree=detailed
+n2: 69326432 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 69265352 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 69265352 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 69052472 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 69040152 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 69040152 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 69035776 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 69035776 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 68860736 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 68860736 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 68860736 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 68860736 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 68860736 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 175040 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=77
+#-----------
+time=1029006100
+mem_heap_B=70032568
+mem_heap_extra_B=257320
+mem_stacks_B=0
+heap_tree=detailed
+n2: 70032568 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 69971488 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 69971488 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 69757008 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 69744688 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 69744688 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 69740312 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 69740312 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 69565272 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 69565272 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 69565272 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 69565272 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 69565272 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 175040 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214480 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=78
+#-----------
+time=1039802112
+mem_heap_B=70745888
+mem_heap_extra_B=259984
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=1044333342
+mem_heap_B=71072456
+mem_heap_extra_B=261128
+mem_stacks_B=0
+heap_tree=detailed
+n2: 71072456 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 71011376 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 71011376 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 70798496 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 70786176 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 70786176 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 70781800 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 70781800 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 70602384 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 70602384 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 70602384 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 70602384 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 70602384 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 179416 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 212880 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=80
+#-----------
+time=1055106604
+mem_heap_B=71800512
+mem_heap_extra_B=263792
+mem_stacks_B=0
+heap_tree=detailed
+n2: 71800512 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 71739432 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 71739432 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 71524912 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 71512592 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 71512592 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 71508216 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 71508216 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 71328800 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 71328800 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 71328800 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 71328800 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 71328800 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 179416 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 214520 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=81
+#-----------
+time=1065918466
+mem_heap_B=72605480
+mem_heap_extra_B=266304
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=1070703405
+mem_heap_B=72949552
+mem_heap_extra_B=267512
+mem_stacks_B=0
+heap_tree=detailed
+n2: 72949552 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 72888472 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 72888472 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 72544520 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 72532200 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 72532200 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 72527824 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 72527824 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 72344032 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 72344032 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 72344032 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 72344032 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 72344032 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 183792 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 343952 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=83
+#-----------
+time=1081499300
+mem_heap_B=73660096
+mem_heap_extra_B=270160
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=84
+#-----------
+time=1081648976
+mem_heap_B=73690776
+mem_heap_extra_B=270216
+mem_stacks_B=0
+heap_tree=detailed
+n2: 73690776 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 73629696 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 73629696 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 73284064 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 73271744 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 73271744 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 73267368 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 73267368 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 73083576 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 73083576 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 73083576 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 73083576 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 73083576 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 183792 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 345632 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=85
+#-----------
+time=1092444445
+mem_heap_B=74404016
+mem_heap_extra_B=272880
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=86
+#-----------
+time=1096467895
+mem_heap_B=74695576
+mem_heap_extra_B=273896
+mem_stacks_B=0
+heap_tree=peak
+n2: 74695576 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 74634496 0x6CC673: sqlite3MemMalloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+  n2: 74634496 0x6B0D47: sqlite3Malloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+   n2: 74290544 0x6B142C: pcache1Alloc (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+    n1: 74278224 0x6B8727: pcache1FetchStage2 (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+     n2: 74278224 0x71B8C8: getPageNormal (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+      n1: 74273848 0x6CDD3C: btreeGetUnusedPage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+       n2: 74273848 0x720EF0: allocateBtreePage (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n1: 74085680 0x725752: balance (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+         n1: 74085680 0x731CBB: sqlite3BtreeInsert (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+          n1: 74085680 0x75EA58: sqlite3VdbeExec (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+           n1: 74085680 0x76651E: sqlite3_step (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+            n0: 74085680 0x65E40B: directzmsqlitezm2zi3zi29zmc88776865858179d3bdde903af0ca16c9c74cc32b13abf39b5b6a61adebc618a_DatabaseziSQLite3_zdwstep_info (in /home/olaf/.cabal/store/ghc-8.8.4/scheme-0.1.0.0-e-scheme-4b3cb10813986df28f70a2f901e665aad00f3aa3c8b98fdb53238fee85ab2feb/bin/scheme)
+        n0: 188168 in 3 places, all below massif's threshold (1.00%)
+      n0: 4376 in 1 place, below massif's threshold (1.00%)
+    n0: 12320 in 4 places, all below massif's threshold (1.00%)
+   n0: 343952 in 31 places, all below massif's threshold (1.00%)
+ n0: 61080 in 10 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=87
+#-----------
+time=1109178018
+mem_heap_B=75256280
+mem_heap_extra_B=275872
+mem_stacks_B=0
+heap_tree=empty

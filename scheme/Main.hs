@@ -36,6 +36,11 @@ import System.IO
 import System.PosixCompat (fileSize, getFileStatus)
 import Test.QuickCheck (choose, generate)
 import Text.Regex.Applicative as RE (Alternative (many), psym)
+import System.Environment (getArgs)
+import Text.Read (readMaybe)
+import GHC.Unicode (toLower)
+import GHC.IO.Handle (hFlush)
+import GHC.IO.Handle.FD (stdout)
 
 type Parser a = BNF Token a
 
@@ -285,7 +290,7 @@ benchmarkExecute3 n = foldM step (EM5.mkExplorerNoSharing runExpr initialContext
 
 benchmarkExecute4 :: Int -> IO (EM7.Explorer Expr Context [String])
 benchmarkExecute4 n = do
-  explr <- EM7.mkExplorerIO EM7.defaultSettings "scheme.db" runExpr initialContext
+  explr <- EM7.mkExplorerIO EM7.defaultSettings ":memory:" runExpr initialContext
   forM_ [1 .. n] $ \_ -> do
     expr <- generate genExprValid
     EM7.execute expr explr
@@ -350,8 +355,35 @@ benchmarkJump4 explr = do
     Just newExplr -> return newExplr
     Nothing -> return explr
 
+-- Parse common boolean command line values
+parseBoolArg :: String -> Maybe Bool
+parseBoolArg s = case map toLower s of
+  "true"   -> Just True
+  "false"  -> Just False
+  "1"      -> Just True
+  "0"      -> Just False
+  "yes"    -> Just True
+  "no"     -> Just False
+  "y"      -> Just True
+  "n"      -> Just False
+  "inmem"  -> Just True
+  "memory" -> Just True
+  "mem"    -> Just True
+  "disk"   -> Just False
+  "file"   -> Just False
+  _         -> Nothing
+
 main :: IO ()
 main =
+  -- do
+  -- args <- getArgs
+  -- let usage = "Usage: scheme <p: Float> <inMemory: Bool|true|false|1|0|yes|no|inmem|disk>"
+  -- case args of
+  --   [pStr, inMemStr] ->
+  --     case (readMaybe pStr :: Maybe Float, parseBoolArg inMemStr) of
+  --       (Just p, Just inMem) -> testInMemoryDB p inMem
+  --       _ -> putStrLn usage
+  --   _ -> putStrLn usage
   defaultMainWith
     (defaultConfig {timeLimit = 60, resamples = 1000, verbosity = Verbose})
     [ bgroup
@@ -361,21 +393,21 @@ main =
           bench "Improved" $ nfIO   (benchmarkExecute3 n),
           bench "Disk"     $ whnfIO (benchmarkExecute4 n),
           bench "Patch"    $ nfIO   (benchmarkExecute5 n)
-        ],
-      bgroup
-        "single execute"
-        [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkExecute6 explr),
-          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkExecute7 explr),
-          env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkExecute8 explr),
-          env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkExecute9 explr)
-        ],
-      bgroup
-        "jump"
-        [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkJump1 explr),
-          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkJump2 explr),
-          env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkJump3 explr),
-          env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkJump4 explr)
         ]
+      -- bgroup
+      --   "single execute"
+      --   [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkExecute6 explr),
+      --     env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkExecute7 explr),
+      --     env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkExecute8 explr),
+      --     env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkExecute9 explr)
+      --   ],
+      -- bgroup
+      --   "jump"
+      --   [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkJump1 explr),
+      --     env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkJump2 explr),
+      --     env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkJump3 explr),
+      --     env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkJump4 explr)
+      --   ]
     ]
   where
     n = 250
@@ -547,27 +579,16 @@ compareTrees explr1 explr2 = do
 
 
 -- Testing in-memory database
-testInMemoryDB :: Bool -> IO ()
-testInMemoryDB inMemory = do
-  handle <- openFile "../results/data/scheme/sqlite.csv" AppendMode
-  runDisk handle 500 1
-  -- forM_ [(0 :: Integer) .. 10] $ \p -> runDisk handle 500 (fromIntegral p / 10)
-  hClose handle
+testInMemoryDB :: Float -> Bool -> IO ()
+testInMemoryDB p inMemory = do
+  runDisk 500
   where
-    runDisk _ 400 _ = return ()
-    runDisk h n p = do
-      runDisk h (n - 100) p
-      -- forM_ [(1 :: Integer) .. 5] $ \x -> do
+    runDisk n = do
       print (n, p)
-      _ <- randomTreeDisk2 inMemory n p
-      size <- fileSize <$> getFileStatus "scheme.db"
-    -- If not in memory, write filesize to handle
-      unless inMemory $ hPutStr h $ show n ++ "," ++ show p ++ "," ++ show size ++ ","
-    -- Wait for input from the user to continue
-      putStr "Measurement: "
-      measurement <- (read <$> getLine) :: IO Int
-      when inMemory $ hPrint h measurement
-      unless inMemory $ hPutStr h $ show measurement ++ ","
+      explr <- randomTreeDisk2 inMemory n p
+      cache <- EM7.getCacheContent explr
+      cacheSize <- recursiveSizeNF cache
+      putStrLn $ "Cache size: " ++ show cacheSize
 
 
 randomTreeDisk2 :: Bool -> Int -> Float -> IO (EM7.Explorer Expr Context [String])
