@@ -24,6 +24,7 @@ library
       Language.Explorer.Monadic,
       Language.Explorer.Monadic2,
       Language.Explorer.Monadic3,
+      Language.Explorer.Monadic3_2,
       Language.Explorer.Monadic4,
       Language.Explorer.Monadic5,
       Language.Explorer.Compressed,

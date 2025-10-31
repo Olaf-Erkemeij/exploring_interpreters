@@ -23,6 +23,8 @@ import Data.Tree (Tree (..))
 import qualified Language.Explorer.Tools.Diff as Diff
 import Language.Explorer.Tools.DiskStore (Ref)
 import qualified Language.Explorer.Tools.DiskStore as DiskStore
+import Control.Monad.Trans.Maybe (MaybeT (MaybeT))
+import Control.Monad.IO.Class
 
 type Language p c o = (Eq p, Eq o, Monoid o)
 
@@ -61,7 +63,7 @@ data ExpNode p c o = ExpNode
 instance (NFData c, NFData p, NFData o) => NFData (ExpNode p c o) where
   rnf (ExpNode c p e) = rnf c `seq` rnf p `seq` rnf e
 
-newtype Explorer p c o = Explorer (IORef (ExplorerState p c o))
+newtype Explorer p c o = Explorer (ExplorerState p c o)
 
 -- Needed for benchmarking, not implemented
 instance (NFData c, NFData p, NFData o) => NFData (Explorer p c o) where
@@ -94,7 +96,7 @@ mkExplorerIO settings path definterp conf = do
 
   DiskStore.writeNodeData diskStore initialRef 0 True configBlobCompressed edgeBlob
 
-  ref <- newIORef $ ExplorerState {
+  let ref = ExplorerState {
     diskStore = diskStore,
     cache = cache,
     currRef = initialRef,
@@ -116,7 +118,7 @@ mkExplorerExisting settings path definterp = do
   cache <- LRU.newAtomicLRU (Just 10)
   startRef <- fromMaybe initialRef <$> DiskStore.findHighestRef diskStore
 
-  ref <- newIORef $ ExplorerState {
+  let ref = ExplorerState {
     diskStore = diskStore,
     cache = cache,
     currRef = startRef,
@@ -129,15 +131,14 @@ mkExplorerExisting settings path definterp = do
   return (Explorer ref)
 
 closeExplorer :: Explorer p c o -> IO ()
-closeExplorer (Explorer stateRef) = readIORef stateRef >>= (DiskStore.closeStore . diskStore)
+closeExplorer (Explorer state) = DiskStore.closeStore (diskStore state)
 
 reconstruct ::
   (Storable p c o) =>
   Ref ->
   ExplorerState p c o ->
-  IORef (ExplorerState p c o) ->
   IO (Maybe (ExpNode p c o))
-reconstruct ref state stateRef = do
+reconstruct ref state = do
   mRawData <- DiskStore.fetchNodeData (diskStore state) ref
   case mRawData of
     Nothing -> return Nothing
@@ -145,13 +146,13 @@ reconstruct ref state stateRef = do
       let mEdge = mEdgeBlob >>= (Diff.decompress >=> Diff.decodeBinary)
 
       mConfig <-
-        if isNothing cBlob 
-          then getConfigIO parentRef stateRef
+        if isNothing cBlob
+          then getConfigIO parentRef state
         else
           if isKeyframe
             then return $ Diff.decompress (fromJust cBlob) >>= Diff.decodeJSON
             else do
-              mParentConfig <- getConfigIO parentRef stateRef
+              mParentConfig <- getConfigIO parentRef state
               case mParentConfig of
                 Nothing -> return Nothing
                 Just cParent -> do
@@ -174,50 +175,44 @@ reconstruct ref state stateRef = do
         (Just c, Nothing) | ref == initialRef -> buildNode c Nothing
         _ -> return Nothing
 
-getNodeIO :: (Storable p c o) => Ref -> IORef (ExplorerState p c o) -> IO (Maybe (ExpNode p c o))
-getNodeIO ref stateRef = do
-  state <- readIORef stateRef
-  LRU.lookup ref (cache state) >>= maybe (reconstruct ref state stateRef) (pure . Just)
+getNodeIO :: (Storable p c o) => Ref -> ExplorerState p c o -> IO (Maybe (ExpNode p c o))
+getNodeIO ref state = do
+  LRU.lookup ref (cache state) >>= maybe (reconstruct ref state) (pure . Just)
 
-getConfigIO :: (Storable p c o) => Ref -> IORef (ExplorerState p c o) -> IO (Maybe c)
-getConfigIO ref stateRef = fmap nodeConfig <$> getNodeIO ref stateRef
+getConfigIO :: (Storable p c o) => Ref -> ExplorerState p c o -> IO (Maybe c)
+getConfigIO ref state = fmap nodeConfig <$> getNodeIO ref state
 
 deref :: Storable p c o => Explorer p c o -> Ref -> IO (Maybe c)
-deref (Explorer stateRef) ref = getConfigIO ref stateRef
+deref (Explorer state) ref = getConfigIO ref state
 
 getNode :: (Storable p c o) => Explorer p c o -> Ref -> IO (Maybe (ExpNode p c o))
 getNode (Explorer stateRef) ref = getNodeIO ref stateRef
 
 config :: (Storable p c o) => Explorer p c o -> IO c
-config (Explorer stateRef) = do
-  ExplorerState {..} <- readIORef stateRef
-  getConfigIO currRef stateRef >>= maybe (fail "Current configuration not found.") return
+config (Explorer state) = do
+  getConfigIO (currRef state) state >>= maybe (fail "Current configuration not found.") return
 
 getCache :: (Storable p c o) => Explorer p c o -> IO (LRU.AtomicLRU Ref (ExpNode p c o))
-getCache (Explorer stateRef) = do
-  ExplorerState {..} <- readIORef stateRef
-  return cache
+getCache (Explorer state) = do
+  return (cache state)
 
 getCacheContent :: (Storable p c o) => Explorer p c o -> IO [(Ref, ExpNode p c o)]
-getCacheContent (Explorer stateRef) = do
-  ExplorerState {..} <- readIORef stateRef
-  LRU.toList cache
+getCacheContent (Explorer state) = do
+  LRU.toList (cache state)
 
 getCurrRef :: (Storable p c o) => Explorer p c o -> IO Ref
-getCurrRef (Explorer stateRef) = do
-  ExplorerState {..} <- readIORef stateRef
-  return currRef
+getCurrRef (Explorer state) = do
+  return (currRef state)
 
-execute :: (Storable p c o) => p -> Explorer p c o -> IO o
-execute p (Explorer stateRef) = do
-  state@ExplorerState {..} <- readIORef stateRef
-  mConfig <- getConfigIO currRef stateRef
+execute :: (Storable p c o) => p -> Explorer p c o -> IO (Explorer p c o, o)
+execute p (Explorer state@ExplorerState{..}) = do
+  mConfig <- getConfigIO currRef state
   case mConfig of
     Nothing -> error "Configuration not found."
     Just conf -> do
       (mcfg, o) <- interpreter p conf
       case mcfg of
-        Nothing -> return o
+        Nothing -> return (Explorer state, o)
         Just newconf -> do
           let newRef = genRef + 1
           let parent = currRef
@@ -235,52 +230,53 @@ execute p (Explorer stateRef) = do
           let node = ExpNode newconf parent (Just (p, o))
           LRU.insert newRef node cache
 
-          atomicModifyIORef' stateRef $ \s -> (s {currRef = newRef, genRef = newRef}, o)
+          return (Explorer ( state {currRef = newRef, genRef = newRef} ), o)
 
-executeAll :: (Storable p c o, Monoid o) => [p] -> Explorer p c o -> IO o
-executeAll ps explorer = foldM (\acc p -> (acc <>) <$> execute p explorer) mempty ps
+executeAll :: (Storable p c o, Monoid o) => [p] -> Explorer p c o -> IO (Explorer p c o, o)
+executeAll ps explorer = foldlM executeCollect (explorer, mempty) ps
+  where
+    executeCollect (exp, out) p = do
+      (res, out') <- execute p exp
+      return (res, out `mappend` out')
 
-revert :: (Storable p c o) => Ref -> Explorer p c o -> IO Bool
-revert targetRef (Explorer stateRef) = do
-  state@ExplorerState {..} <- readIORef stateRef
+revert :: (Storable p c o) => Ref -> Explorer p c o -> MaybeT IO (Explorer p c o)
+revert targetRef (Explorer state@ExplorerState{..}) = do
   if targetRef == currRef
-    then return True
+    then return (Explorer state)
     else do
-      mPath <- findAncestryPath currRef targetRef [] stateRef
+      mPath <- liftIO $ findAncestryPath currRef targetRef [] state
       case mPath of
-        Nothing -> return False
+        Nothing -> MaybeT (return Nothing)
         Just nodesToDelete -> do
-          DiskStore.deleteNodes diskStore nodesToDelete
-          forM_ nodesToDelete (`LRU.delete` cache)
-          atomicModifyIORef' stateRef $ \s -> (s {currRef = targetRef}, ())
-          return True
+          liftIO $ DiskStore.deleteNodes diskStore nodesToDelete
+          liftIO $ forM_ nodesToDelete (`LRU.delete` cache)
 
-findAncestryPath :: (Storable p c o) => Ref -> Ref -> [Ref] -> IORef (ExplorerState p c o) -> IO (Maybe [Ref])
-findAncestryPath start end acc stateRef
+          return (Explorer (state {currRef = targetRef}))
+
+findAncestryPath :: (Storable p c o) => Ref -> Ref -> [Ref] -> ExplorerState p c o -> IO (Maybe [Ref])
+findAncestryPath start end acc state
   | start == end = return $ Just acc
   | start == 0 = return Nothing
   | otherwise =
-      getNodeIO start stateRef >>= \case
+      getNodeIO start state >>= \case
         Nothing -> pure Nothing
-        Just node -> findAncestryPath (nodeParent node) end (start : acc) stateRef
+        Just node -> findAncestryPath (nodeParent node) end (start : acc) state
 
-jump :: (Storable p c o) => Ref -> Explorer p c o -> IO Bool
-jump targetRef (Explorer stateRef) = do
-  state@ExplorerState {..} <- readIORef stateRef
+jump :: (Storable p c o) => Ref -> Explorer p c o -> MaybeT IO (Explorer p c o)
+jump targetRef (Explorer state@ExplorerState{..}) = do
   if targetRef == currRef
-    then return True
-    else
-      getNodeIO targetRef stateRef >>= \case
-        Nothing -> return False
+    then return (Explorer state)
+    else do
+      result <- liftIO $ getNodeIO targetRef state
+      case result of
+        Nothing -> MaybeT (return Nothing)
         Just _ -> do
-          atomicModifyIORef' stateRef $ \s -> (s {currRef = targetRef}, ())
-          return True
+          return (Explorer (state {currRef = targetRef}))
 
 toTree :: (Storable p c o) => Explorer p c o -> IO (Tree (Ref, c))
-toTree exp@(Explorer stateRef) = do
-  ExplorerState {..} <- readIORef stateRef
+toTree exp@(Explorer state@ExplorerState{..}) = do
   let buildNodeIO ref =
-        getNodeIO ref stateRef >>= \case
+        getNodeIO ref state >>= \case
           Nothing -> error $ "toTree: Cannot find node for ref " ++ show ref
           Just node -> do
             childTrees <- mapM buildNodeIO =<< DiskStore.findChildren diskStore ref

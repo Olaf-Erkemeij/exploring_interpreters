@@ -21,7 +21,7 @@ import qualified Language.Explorer.Compressed as EM6
 import qualified Language.Explorer.Disk as EM7
 import Language.Explorer.Monadic as EM1
 import qualified Language.Explorer.Monadic2 as EM2
-import qualified Language.Explorer.Monadic3 as EM3
+import qualified Language.Explorer.Monadic3_2 as EM3
 import qualified Language.Explorer.Monadic4 as EM4
 import qualified Language.Explorer.Monadic5 as EM5
 import Language.Explorer.Tools.REPL (metaTable, repl)
@@ -211,9 +211,8 @@ runFinalExperiment handles@[h1, h2, h3, h4, h5, h6, h7] n p = do
     hPutStrLn h2 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap2 ++ "," ++ show parents2 ++ "," ++ show children2
 
     cmap3 <- recursiveSizeNF (EM3.cmap explr3)
-    parents3 <- recursiveSizeNF (EM3.parents explr3)
-    children3 <- recursiveSizeNF (EM3.children explr3)
-    hPutStrLn h3 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap3 ++ "," ++ show parents3 ++ "," ++ show children3
+    exec3 <- recursiveSizeNF (EM3.execEnv explr3)
+    hPutStrLn h3 $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap3 ++ "," ++ show exec3
 
     cmap4 <- recursiveSizeNF (EM4.cmap explr4)
     exec4 <- recursiveSizeNF (EM4.execEnv explr4)
@@ -249,9 +248,8 @@ runFinalExperiment2 handles n p = do
     hPutStrLn (handles !! 1) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap2 ++ "," ++ show parents2 ++ "," ++ show children2
 
     cmap3 <- recursiveSizeNF (EM3.cmap explr3)
-    parents3 <- recursiveSizeNF (EM3.parents explr3)
-    children3 <- recursiveSizeNF (EM3.children explr3)
-    hPutStrLn (handles !! 2) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap3 ++ "," ++ show parents3 ++ "," ++ show children3
+    exec3 <- recursiveSizeNF (EM3.execEnv explr3)
+    hPutStrLn (handles !! 2) $ show n ++ "," ++ show p ++ "," ++ show x ++ "," ++ show cmap3 ++ "," ++ show exec3
 
     cmap4 <- recursiveSizeNF (EM4.cmap explr4)
     exec4 <- recursiveSizeNF (EM4.execEnv explr4)
