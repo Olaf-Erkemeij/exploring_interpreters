@@ -72,7 +72,7 @@ def plot_final_test(pgf=False):
         4: ["Cmap", "ExecEnv"],
         5: ["History"],
         6: ["Cmap", "ExecEnv"],
-        7: ["Filesize"],
+        7: ["Filesize", "Cachesize"]
     }
 
     ext = "pgf" if pgf else "png"
@@ -155,7 +155,7 @@ def plot_final_test2(pgf=False):
         4: ["Cmap", "ExecEnv"],
         5: ["History"],
         6: ["Cmap", "ExecEnv"],
-        7: ["Filesize"],
+        7: ["Filesize", "Cachesize"]
     }
 
     order = {"scheme": [6, 2, 3, 4, 1, 5, 7], "mini-java": [6, 2, 3, 1, 5, 4, 7]}
@@ -238,8 +238,8 @@ def plot_final_test2(pgf=False):
 
 
 if __name__ == "__main__":
-    plot_final_test()
-    plot_final_test2()
-    # set_pgf()
-    # plot_final_test(pgf=True)
-    # plot_final_test2(pgf=True)
+    # plot_final_test()
+    # plot_final_test2()
+    set_pgf()
+    plot_final_test(pgf=True)
+    plot_final_test2(pgf=True)
