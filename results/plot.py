@@ -72,7 +72,7 @@ def plot_final_test(pgf=False):
         4: ["Cmap", "ExecEnv"],
         5: ["History"],
         6: ["Cmap", "ExecEnv"],
-        7: ["Filesize", "Cachesize"]
+        7: ["Filesize"]
     }
 
     ext = "pgf" if pgf else "png"
@@ -155,10 +155,10 @@ def plot_final_test2(pgf=False):
         4: ["Cmap", "ExecEnv"],
         5: ["History"],
         6: ["Cmap", "ExecEnv"],
-        7: ["Filesize", "Cachesize"]
+        7: ["Filesize"]
     }
 
-    order = {"scheme": [6, 2, 3, 4, 1, 5, 7], "mini-java": [6, 2, 3, 1, 5, 4, 7]}
+    order = {"scheme": [6, 2, 4, 1, 3, 5, 7], "mini-java": [6, 2, 1, 3, 5, 4, 7]}
 
     set_order = lambda f, v: [o for o in order[f] if o in v]
 
