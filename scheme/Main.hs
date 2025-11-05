@@ -25,7 +25,6 @@ import qualified Language.Explorer.Monadic3_2 as EM3
 import qualified Language.Explorer.Monadic4 as EM4
 import qualified Language.Explorer.Monadic5 as EM5
 import Language.Explorer.Tools.REPL (metaTable, repl)
-import qualified Language.Explorer.Tools.REPL2 as REPL2
 import System.IO
   ( Handle,
     IOMode (AppendMode, WriteMode),
@@ -41,6 +40,8 @@ import Text.Read (readMaybe)
 import GHC.Unicode (toLower)
 import GHC.IO.Handle (hFlush)
 import GHC.IO.Handle.FD (stdout)
+import qualified Language.Explorer.Disk as EM7
+import Control.Monad.Trans.Maybe (MaybeT(runMaybeT))
 
 type Parser a = BNF Token a
 
@@ -97,15 +98,6 @@ schemeExplorer = EM1.mkExplorerNoSharing runExpr initialContext
 
 schemeREPL :: IO ()
 schemeREPL = repl (const "Scheme> ") replParser ":" metaTable (\_ ex -> return ex) (putStr . concat) schemeExplorer
-
-schemeREPL2 :: IO ()
-schemeREPL2 = do
-  let prompt = const "Scheme> "
-  let metaPrefix = ":"
-  let metaHandler _ _ = return ()
-  let outputHandler = putStr . concat
-  explorer <- EM7.mkExplorerIO EM7.defaultSettings "scheme.db" runExpr initialContext
-  REPL2.repl prompt replParser metaPrefix REPL2.metaTable metaHandler outputHandler explorer
 
 initialContext' :: IO Context
 initialContext' = return initialContext
@@ -175,7 +167,7 @@ runFinalExperiments = do
       hPutStrLn handle "N,P,X,Filesize"
     return handle
   -- forM_ [(0 :: Integer) .. 10] $ \p -> runFinalExperiment handles 100 (fromIntegral p / 10)
-  forM_ [(0::Integer)..10] $ \p -> runFinalExperiment2 handles 200 (fromIntegral p / 10)
+  forM_ [(0::Integer)..10] $ \p -> runFinalExperiment2 handles 500 (fromIntegral p / 10)
   mapM_ hClose handles
 
 runDiskExperiment :: IO ()
@@ -288,11 +280,10 @@ benchmarkExecute3 n = foldM step (EM5.mkExplorerNoSharing runExpr initialContext
 
 benchmarkExecute4 :: Int -> IO (EM7.Explorer Expr Context [String])
 benchmarkExecute4 n = do
-  explr <- EM7.mkExplorerIO EM7.defaultSettings ":memory:" runExpr initialContext
-  forM_ [1 .. n] $ \_ -> do
-    expr <- generate genExprValid
-    EM7.execute expr explr
-  return explr
+  explr <- EM7.mkExplorerIO EM7.defaultSettings "scheme.db" runExpr initialContext
+  foldM step explr [1 .. n]
+  where
+    step explr _ = fst <$> (generate genExprValid >>= flip EM7.execute explr)
 
 benchmarkExecute5 :: Int -> IO (EM4.Explorer Expr IO Context [String])
 benchmarkExecute5 n = foldM step (EM4.mkExplorerNoSharing runExpr initialContext) [1 .. n]
@@ -315,8 +306,8 @@ benchmarkExecute7 explr = do
 benchmarkExecute8 :: EM7.Explorer Expr Context [String] -> IO (EM7.Explorer Expr Context [String])
 benchmarkExecute8 explr = do
   expr <- generate genExprValid
-  _ <- EM7.execute expr explr
-  return explr
+  (newExplr, _) <- EM7.execute expr explr
+  return newExplr
 
 benchmarkExecute9 :: EM4.Explorer Expr IO Context [String] -> IO (EM4.Explorer Expr IO Context [String])
 benchmarkExecute9 explr = do
@@ -339,12 +330,14 @@ benchmarkJump2 explr = do
     Just newExplr -> return newExplr
     Nothing -> return explr
 
-benchmarkJump3 :: EM7.Explorer Expr Context [String] -> IO Ref
+benchmarkJump3 :: EM7.Explorer Expr Context [String] -> IO (EM7.Explorer Expr Context [String])
 benchmarkJump3 explr = do
   curr <- EM7.getCurrRef explr
   jumpRef <- generate (choose (1, curr - 1))
-  _ <- EM7.jump jumpRef explr
-  EM7.getCurrRef explr
+  result <- runMaybeT (EM7.jump jumpRef explr)
+  case result of
+    Just newExplr -> return newExplr
+    Nothing -> return explr
 
 benchmarkJump4 :: EM4.Explorer Expr IO Context [String] -> IO (EM4.Explorer Expr IO Context [String])
 benchmarkJump4 explr = do
@@ -372,7 +365,7 @@ parseBoolArg s = case map toLower s of
   _         -> Nothing
 
 main :: IO ()
-main =
+main = -- runFinalExperiments
   -- do
   -- args <- getArgs
   -- let usage = "Usage: scheme <p: Float> <inMemory: Bool|true|false|1|0|yes|no|inmem|disk>"
@@ -384,28 +377,30 @@ main =
   --   _ -> putStrLn usage
   defaultMainWith
     (defaultConfig {timeLimit = 60, resamples = 1000, verbosity = Verbose})
-    [ bgroup
-        "chain execute"
-        [ bench "Plain"    $ nfIO   (benchmarkExecute1 n),
-          bench "Default"  $ nfIO   (benchmarkExecute2 n),
-          bench "Improved" $ nfIO   (benchmarkExecute3 n),
-          bench "Disk"     $ whnfIO (benchmarkExecute4 n),
-          bench "Patch"    $ nfIO   (benchmarkExecute5 n)
-        ]
+    [ 
       -- bgroup
-      --   "single execute"
-      --   [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkExecute6 explr),
-      --     env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkExecute7 explr),
-      --     env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkExecute8 explr),
-      --     env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkExecute9 explr)
+      --   "chain execute"
+      --   [ bench "Plain"    $ nfIO   (benchmarkExecute1 n),
+      --     bench "Default"  $ nfIO   (benchmarkExecute2 n),
+      --     bench "Improved" $ nfIO   (benchmarkExecute3 n),
+      --     bench "Disk"     $ nfIO   (benchmarkExecute4 n),
+      --     bench "Patch"    $ nfIO   (benchmarkExecute5 n)
       --   ],
-      -- bgroup
-      --   "jump"
-      --   [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkJump1 explr),
-      --     env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkJump2 explr),
-      --     env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ whnfIO (benchmarkJump3 explr),
-      --     env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkJump4 explr)
-      --   ]
+      bgroup
+        "single execute"
+        [ 
+          -- env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkExecute6 explr),
+          -- env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkExecute7 explr),
+          env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ nfIO   (benchmarkExecute8 explr),
+          env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkExecute9 explr)
+        ],
+      bgroup
+        "jump"
+        [ env (randomTree n p)     $ \explr -> bench "Default"  $ nfIO   (benchmarkJump1 explr),
+          env (randomTreeFive n p) $ \explr -> bench "Improved" $ nfIO   (benchmarkJump2 explr),
+          env (randomTreeDisk n p) $ \explr -> bench "Disk"     $ nfIO   (benchmarkJump3 explr),
+          env (randomTreeFour n p) $ \explr -> bench "Patch"    $ nfIO   (benchmarkJump4 explr)
+        ]
     ]
   where
     n = 250
@@ -417,14 +412,18 @@ randomTreeDisk n p = do
   explr <- randomTreeDisk (n - 1) p
   randExpr <- generate genExprValid
   jumpCond <- generate $ choose (0.0, 1.0)
-  when (jumpCond <= p) $ do
-    curr <- EM7.getCurrRef explr
-    jumpRef <- generate (choose (1, curr - 1))
-    _ <- EM7.jump jumpRef explr
-    return ()
-
-  _ <- EM7.execute randExpr explr
-  return explr
+  curr <- EM7.getCurrRef explr
+  explr' <-
+    if jumpCond <= p
+      then do
+        jumpRef <- generate (choose (1, curr - 1))
+        result <- runMaybeT (EM7.jump jumpRef explr)
+        case result of
+          Just newExplr -> return newExplr
+          Nothing -> return explr
+      else return explr
+  (newExplr, _) <- EM7.execute randExpr explr'
+  return newExplr
 
 randomTreeFive :: Int -> Float -> IO (EM5.Explorer Expr IO Context [String])
 randomTreeFive 1 _ = EM5.mkExplorerNoSharing runExpr <$> initialContext'
@@ -497,10 +496,10 @@ randomTrees n p = do
             jumped4 = EM4.jump jumpRef explr4
             jumped5 = EM5.jump jumpRef explr5
             jumped6 = EM6.jump jumpRef explr6
-        jumped7 <- EM7.jump jumpRef explr7
+        jumped7 <- runMaybeT (EM7.jump jumpRef explr7)
         case (jumped1, jumped2, jumped3, jumped4, jumped5, jumped6, jumped7) of
-          (Just newExplr1, Just newExplr2, Just newExplr3, Just newExplr4, Just newExplr5, Just newExplr6, True) ->
-            return (newExplr1, newExplr2, newExplr3, newExplr4, newExplr5, newExplr6, explr7)
+          (Just newExplr1, Just newExplr2, Just newExplr3, Just newExplr4, Just newExplr5, Just newExplr6, Just newExplr7) ->
+            return (newExplr1, newExplr2, newExplr3, newExplr4, newExplr5, newExplr6, newExplr7)
           _ -> return (explr1, explr2, explr3, explr4, explr5, explr6, explr7)
       else return (explr1, explr2, explr3, explr4, explr5, explr6, explr7)
 
@@ -510,7 +509,7 @@ randomTrees n p = do
   (newExplr4, _) <- EM4.execute randExpr explr4'
   (newExplr5, _) <- EM5.execute randExpr explr5'
   (newExplr6, _) <- EM6.execute randExpr explr6'
-  _ <- EM7.execute randExpr explr7'
+  (newExplr7, _) <- EM7.execute randExpr explr7'
 
   return
     ( newExplr1,
@@ -519,7 +518,7 @@ randomTrees n p = do
       newExplr4,
       newExplr5,
       newExplr6,
-      explr7'
+      newExplr7
     )
 
 -- TESTING: COMPARE VERSIONS ON THE SAME TREE
@@ -536,16 +535,16 @@ randomTreeTwo n p = do
     if jumpCond <= p
       then do
         jumpRef <- generate (choose (1, EM1.currRef explr2 - 1))
-        jumped <- EM7.jump jumpRef explr
+        jumped <- runMaybeT (EM7.jump jumpRef explr)
         case (jumped, EM1.jump jumpRef explr2) of
-          (True, Just newExplr2) -> return (explr, newExplr2)
+          (Just newExplr, Just newExplr2) -> return (newExplr, newExplr2)
           _ -> return (explr, explr2)
       else return (explr, explr2)
 
-  _ <- EM7.execute randExpr explr'
+  (newExplr, _) <- EM7.execute randExpr explr'
   (newExplr2, _) <- EM1.execute randExpr explr2'
 
-  return (return explr, return newExplr2)
+  return (return newExplr, return newExplr2)
 
 measureExplorerTwo :: Int -> Float -> IO ()
 measureExplorerTwo n p = do
@@ -596,11 +595,14 @@ randomTreeDisk2 inMemory n p = do
   explr <- randomTreeDisk2 inMemory (n - 1) p
   randExpr <- generate genExprValid
   jumpCond <- generate $ choose (0.0, 1.0)
-  when (jumpCond <= p) $ do
+  explr' <- if jumpCond <= p then do
     curr <- EM7.getCurrRef explr
     jumpRef <- generate (choose (1, curr - 1))
-    _ <- EM7.jump jumpRef explr
-    return ()
+    result <- runMaybeT (EM7.jump jumpRef explr)
+    case result of
+      Just newExplr -> return newExplr
+      Nothing -> return explr
+  else return explr
 
-  _ <- EM7.execute randExpr explr
-  return explr
+  (newExplr, _) <- EM7.execute randExpr explr'
+  return newExplr

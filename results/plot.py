@@ -68,7 +68,7 @@ def plot_final_test(pgf=False):
     size_dict = {
         1: ["Cmap", "ExecEnv"],
         2: ["Cmap", "Parents", "Children"],
-        3: ["Cmap", "Parents", "Children"],
+        3: ["Cmap", "ExecEnv"],
         4: ["Cmap", "ExecEnv"],
         5: ["History"],
         6: ["Cmap", "ExecEnv"],
@@ -83,6 +83,8 @@ def plot_final_test(pgf=False):
                 plt.figure(figsize=(3.5, 2.5))
             else:
                 plt.figure(figsize=(10, 5.5))
+
+            print(folder, version)
 
             data = pd.read_csv(f"data/{folder}/v{version}.csv")
             data["size"] = sum([data[col] for col in size_dict[version]])
@@ -149,7 +151,7 @@ def plot_final_test2(pgf=False):
     size_dict = {
         1: ["Cmap", "ExecEnv"],
         2: ["Cmap", "Parents", "Children"],
-        3: ["Cmap", "Parents", "Children"],
+        3: ["Cmap", "ExecEnv"],
         4: ["Cmap", "ExecEnv"],
         5: ["History"],
         6: ["Cmap", "ExecEnv"],
@@ -173,6 +175,7 @@ def plot_final_test2(pgf=False):
             plt.figure(figsize=(10, 5.5))
 
             for version in set_order(folder, versions):
+                print(folder, name, version)
                 data = pd.read_csv(f"data/{folder}/v{version}_big.csv")
                 data["size"] = sum([data[col] for col in size_dict[version]])
 
@@ -237,6 +240,6 @@ def plot_final_test2(pgf=False):
 if __name__ == "__main__":
     plot_final_test()
     plot_final_test2()
-    set_pgf()
-    plot_final_test(pgf=True)
-    plot_final_test2(pgf=True)
+    # set_pgf()
+    # plot_final_test(pgf=True)
+    # plot_final_test2(pgf=True)

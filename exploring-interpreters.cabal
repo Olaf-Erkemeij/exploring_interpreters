@@ -33,7 +33,6 @@ library
       Language.Explorer.Algebraic,
       Language.Explorer.Pure,
       Language.Explorer.Tools.REPL,
-      Language.Explorer.Tools.REPL2,
       Language.Explorer.Tools.Protocol,
       Language.Explorer.Tools.Diff,
       Language.Explorer.Tools.DiskStore,

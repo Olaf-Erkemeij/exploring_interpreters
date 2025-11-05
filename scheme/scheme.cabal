@@ -32,6 +32,7 @@ executable scheme
                 , binary
                 , unix-compat
                 , criterion
+                , transformers
 
     default-language: Haskell2010
     ghc-options:      -Wall
